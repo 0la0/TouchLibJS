@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>TouchLib Demo</title>
+  <style>
+    body
+    {
+      font-family: helvetica, arial, sans-serif;
+      font-size: 1.3em;
+      color: #cccccc;
+      background: #666666;
+    }
+    .layer
+    {
+      margin-left: 20px;
+      height: 280px;
+      width: 280px;
+      background: #222222;
+      touch-action: none;
+      -ms-touch-action: none;
+    }
+    #top
+    {
+      /*border-bottom: 2px solid blue;*/
+    }
+    #bottom
+    {
+      border-top: 2px solid #2266ff;
+      border-bottom: 2px solid #2266ff;
+      height: 130px;
+    }
+    .container
+    {
+      float: left;
+      margin-left: 20px;
+      text-align: center;
+    }
+    .horizSliderClass
+    {
+      margin-top: 20px;
+      margin-left: 10px;
+      line-height: 30px;
+      float: left;
+    }
+    #topButtonContainer
+    {
+      padding-top: 10px;
+      height: 60px;
+    }
+    #bottomButtonContainer
+    {
+      height: 60px;
+    }
+  </style>
+  <script src="touchLib.js"></script>
+
+</head>
+<body>
+  <div class="layer" id="top">
+    <div class="container" id="a"></div>
+    <div class="container" id="b"></div>
+    <div class="container" id="c"></div>
+  </div>
+  <div class="layer" id="bottom">
+    <div class="container" id="d"></div>
+    <div class="container" id="e"></div>
+  </div>
+  <div class="layer" id="topButtonContainer">
+    <div class="button" id="button01"></div>
+    <div class="button" id="button02"></div>
+  </div>
+  <div class="layer" id="bottomButtonContainer">
+    <div class="button" id="button03"></div>
+    <div class="button" id="button04"></div>
+  </div>
+  <script>
+  
+    var aSlider = new TouchLib.VertSlider({
+      elementId: 'a',
+      label: 'aLabel',
+      fillstyle: '#3366dd',
+      width: 40,
+      height: 200,
+      initVal: 0.0,
+      outputIsOverridden: false,
+      sliderCss: {
+        background: '#444477',
+        border: '2px solid #0033cc',
+        borderRadius: '4px',
+      },
+      update: function (val) {
+        console.log('aSlider val:', val);
+      }
+    });
+
+    var bSlider = new TouchLib.DiscreteVertSlider({
+      elementId: 'b',
+      label: 'bLabel',
+      fillstyle: '#33dd66',
+      binBorderColor: '#2222cc',
+      width: 40,
+      height: 200,
+      numBins: 6,
+      outputIsOverridden: true,
+      initVal: 0.5,
+      sliderCss: {
+        background: '#666677',
+        border: '2px solid #2222cc',
+        borderRadius: '6px',
+      },
+      update: function (val) {
+        this.outputEl.innerHTML = this.numBins - 1 - val;
+        console.log('discreteV val: ', val);
+      }
+    });
+
+    var cSlider = new TouchLib.VertSlider({
+      elementId: 'c',
+      label: 'cLabel',
+      fillstyle: '#3366dd',
+      width: 40,
+      height: 200,
+      initVal: 1.0,
+      outputIsOverridden: false,
+      sliderCss: {
+        background: '#444477',
+        border: '2px solid #0033cc',
+        borderRadius: '4px',
+      },
+      update: function (val) {
+        console.log('cSlider val:', val);
+      }
+    });
+
+    var dSlider = new TouchLib.HorizSlider({
+      elementId: 'd',
+      label: 'D',
+      fillstyle: '#33dd66',
+      width: 160,
+      height: 30,
+      initVal: 0.5,
+      outputIsOverridden: true,
+      sliderCss: {
+        background: '#447744',
+        border: '2px solid #00cc33',
+        borderRadius: '4px',
+      },
+      cssClass: 'horizSliderClass',
+      update: function (val) {
+        val = (Math.round(val * 40) - 20) * 1;
+        console.log('dSlider val: ', val);
+        this.outputEl.innerHTML = val;
+      }
+    });
+
+    var discreteH = new TouchLib.DiscreteHorizSlider({
+      elementId: 'e',
+      label: 'E',
+      fillstyle: '#33dd66',
+      binBorderColor: '#2222cc',
+      width: 160,
+      height: 30,
+      numBins: 6,
+      outputIsOverridden: false,
+      sliderCss: {
+        background: '#666677',
+        border: '2px solid #2222cc',
+        borderRadius: '6px',
+      },
+      cssClass: 'horizSliderClass',
+      update: function (val) {
+        console.log('discreteH val: ', val);
+      }
+    });
+
+    var button01 = new TouchLib.ToggleButton({
+    elementId: 'button01',
+    on: {
+      innerHTML: 'B1 ON',
+      border: '3px solid #2222cc',
+      background: '#666699',
+      color: '#222222'
+    },
+    off: {
+      innerHTML: 'B1 OFF',
+      border: '3px solid #cc2222',
+      background: '#996666',
+      color: '#222222'
+    },
+    css: {
+      width: '100px',
+      height: '40px',
+      lineHeight: '40px',
+      borderRadius: '6px',
+      background: 'black',
+      cursor: 'pointer',
+      textAlign: 'center',
+      float: 'left',
+      marginLeft: '20px'
+    },
+    update: function (val) {
+      console.log('button val: ', val);
+    }
+  });
+
+  var button02 = new TouchLib.ToggleButton({
+    elementId: 'button02',
+    on: {
+      innerHTML: 'B2 ON',
+      border: '3px solid #2222cc',
+      background: '#666699',
+      color: '#222222'
+    },
+    off: {
+      innerHTML: 'B2 OFF',
+      border: '3px solid #cc2222',
+      background: '#996666',
+      color: '#222222'
+    },
+    css: {
+      width: '100px',
+      height: '40px',
+      lineHeight: '40px',
+      borderRadius: '6px',
+      background: 'black',
+      cursor: 'pointer',
+      textAlign: 'center',
+      float: 'left',
+      marginLeft: '10px'
+    },
+    update: function (val) {
+      console.log('button val: ', val);
+    }
+  });
+
+  var button03 = new TouchLib.TriggerButton({
+    elementId: 'button03',
+    triggerTimeout: 150,
+   on: {
+      innerHTML: '!!!',
+      border: '3px solid #22cc22',
+      background: '#669966',
+      color: '#222222'
+    },
+    off: {
+      innerHTML: 'trigger',
+      border: '3px solid #2222cc',
+      background: '#666699',
+      color: '#222222'
+    },
+    css: {
+      width: '100px',
+      height: '40px',
+      lineHeight: '40px',
+      borderRadius: '6px',
+      background: 'black',
+      cursor: 'pointer',
+      textAlign: 'center',
+      float: 'left',
+      marginLeft: '20px'
+    },
+    update: function (val) {
+      console.log('button03 trigger!');
+    }
+  });
+
+  var button04 = new TouchLib.TriggerButton({
+    elementId: 'button04',
+    triggerTimeout: 150,
+    on: {
+      innerHTML: '!!!',
+      border: '3px solid #22cc22',
+      background: '#669966',
+      color: '#222222'
+    },
+    off: {
+      innerHTML: 'trigger',
+      border: '3px solid #2222cc',
+      background: '#666699',
+      color: '#222222'
+    },
+    css: {
+      width: '100px',
+      height: '40px',
+      lineHeight: '40px',
+      borderRadius: '6px',
+      background: 'black',
+      cursor: 'pointer',
+      textAlign: 'center',
+      float: 'left',
+      marginLeft: '10px'
+    },
+    update: function (val) {
+       console.log('button04 trigger!');
+    }
+  });
+
+  </script>
+</body>
+</html>
