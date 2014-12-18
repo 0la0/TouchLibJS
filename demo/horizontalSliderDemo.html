@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Horizontal Slider Demo</title>
+  <style>
+    body
+    {
+      font-family: helvetica, arial, sans-serif;
+      font-size: 1.3em;
+      color: #cccccc;
+      background: #222222;
+    }
+    .parent
+    {
+      width: 360px;
+      touch-action: none;
+      -ms-touch-action: none;
+    }
+    .container
+    {
+      margin-left: 20px;
+    }
+    .horizSliderClass
+    {
+      margin-top: 20px;
+      margin-left: 10px;
+      line-height: 40px;
+      float: left;
+    }
+  </style>
+
+  <script src="../touchLib.js"></script>
+</head>
+<body>
+  
+  <div class="parent">
+    <div class="container" id="hSlider1"></div>
+    <div class="container" id="hSlider2"></div>
+    <div class="container" id="hSlider3"></div>
+  </div>
+
+  <script>
+  
+    var hSlider1 = new TouchLib.HorizSlider({
+      elementId: 'hSlider1',
+      label: 'aLabel',
+      fillstyle: '#3366dd',
+      width: 200,
+      height: 40,
+      initVal: 0.0,
+      outputIsOverridden: false,
+      cssClass: 'horizSliderClass',
+      sliderCss: {
+        background: '#444477',
+        border: '2px solid #0033cc',
+        borderRadius: '4px',
+      },
+      notify: function (val) {
+        console.log('hSlider1 val:', val);
+      }
+    });
+
+    var hSlider2 = new TouchLib.HorizSlider({
+      elementId: 'hSlider2',
+      label: 'bLabel',
+      fillstyle: '#33dd66',
+      binBorderColor: '#2222cc',
+      width: 200,
+      height: 40,
+      outputIsOverridden: true,
+      initVal: 0.5,
+      cssClass: 'horizSliderClass',
+      sliderCss: {
+        background: '#666677',
+        border: '2px solid #2222cc',
+        borderRadius: '6px',
+      },
+      notify: function (val) {
+        val = round(val * 10, 1);
+        this.outputEl.innerHTML = val;
+        console.log('hSlider2 val: ', val);
+      }
+    });
+
+    var hSlider3 = new TouchLib.HorizSlider({
+      elementId: 'hSlider3',
+      label: 'cLabel',
+      fillstyle: '#3366dd',
+      width: 200,
+      height: 40,
+      initVal: 1.0,
+      outputIsOverridden: false,
+      cssClass: 'horizSliderClass',
+      sliderCss: {
+        background: '#444477',
+        border: '2px solid #0033cc',
+        borderRadius: '4px',
+      },
+      notify: function (val) {
+        console.log('hSlider3 val:', val);
+      }
+    });
+
+    function round (value, numDecimals) {
+      var multiplier = Math.pow(10, numDecimals);
+      value = Math.floor(value * multiplier);
+      return value / multiplier;
+    }
+
+  </script>
+</body>
+</html>

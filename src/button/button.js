@@ -55,6 +55,10 @@
       throw 'pram object needs off attributes';
     }
 
+    if (params.cssClassName != undefined) {
+      this.setClass(params.cssClassName);
+    }
+
     if (params.css != undefined) {
       for (var key in params.css) {
         this.element.style[key] = params.css[key];
@@ -114,4 +118,15 @@
       }
 
     }
+  }
+
+  /**
+   *  SETS THE CSS CLASS OF THE BUTTON
+   **/
+  Button.prototype.setClass = function (className) {
+    if (className == null) {
+      console.log('error: no class given');
+      return; 
+    }
+    this.element.className = className;
   }

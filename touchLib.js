@@ -725,6 +725,17 @@
     }
   }
 
+  /**
+   *  SETS THE CSS CLASS OF THE BUTTON
+   **/
+  Button.prototype.setClass = function (className) {
+    if (className == null) {
+      console.log('error: no class given');
+      return; 
+    }
+    this.element.className = className;
+  }
+
     //----------------------------------------//
    //     TOGGLE BUTTON INHERITS BUTTON      //
   //----------------------------------------//

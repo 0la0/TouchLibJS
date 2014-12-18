@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Trigger Button Demo</title>
+  <style>
+    body
+    {
+      font-family: helvetica, arial, sans-serif;
+      font-size: 1.3em;
+      color: #cccccc;
+      background: #666666;
+    }
+    .layer
+    {
+      margin-top: 40px;
+      margin-left: 20px;
+      touch-action: none;
+      -ms-touch-action: none;
+    }
+    .button
+    {
+      width: 100px;
+      height: 40px;
+      line-height: 40px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      float: left;
+      margin-left: 20px; 
+    }
+  </style>
+  <script src="../touchLib.js"></script>
+</head>
+<body>
+  <div class="layer" id="topButtonContainer">
+    <div class="button" id="triggerButton1"></div>
+    <div class="button" id="triggerButton2"></div>
+  </div>
+  <script>
+  
+    var button01 = new TouchLib.TriggerButton({
+    elementId: 'triggerButton1',
+    triggerTimeout: 150,
+    on: {
+      innerHTML: '!!!',
+      border: '3px solid #22cc22',
+      background: '#669966',
+      color: '#222222'
+    },
+    off: {
+      innerHTML: 'trigger',
+      border: '3px solid #2222cc',
+      background: '#666699',
+      color: '#222222'
+    },
+    cssClassName: 'button',
+    notify: function () {
+      console.log('button01 triggered');
+    }
+  });
+
+  var button02 = new TouchLib.TriggerButton({
+    elementId: 'triggerButton2',
+    triggerTimeout: 150,
+    on: {
+      innerHTML: '!!!',
+      border: '3px solid #22cc22',
+      background: '#669966',
+      color: '#222222'
+    },
+    off: {
+      innerHTML: 'trigger',
+      border: '3px solid #2222cc',
+      background: '#666699',
+      color: '#222222'
+    },
+    cssClassName: 'button',
+    notify: function () {
+      console.log('button02 triggered');
+    }
+  });
+  
+  </script>
+</body>
+</html>

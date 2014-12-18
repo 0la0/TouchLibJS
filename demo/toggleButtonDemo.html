@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Toggle Button Demo</title>
+  <style>
+    body
+    {
+      font-family: helvetica, arial, sans-serif;
+      font-size: 1.3em;
+      color: #cccccc;
+      background: #666666;
+    }
+    .layer
+    {
+      margin-top: 40px;
+      margin-left: 20px;
+      touch-action: none;
+      -ms-touch-action: none;
+    }
+    .button
+    {
+      width: 100px;
+      height: 40px;
+      line-height: 40px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      float: left;
+      margin-left: 20px; 
+    }
+  </style>
+  <script src="../touchLib.js"></script>
+</head>
+<body>
+  <div class="layer" id="topButtonContainer">
+    <div class="button" id="toggleButton1"></div>
+    <div class="button" id="toggleButton2"></div>
+  </div>
+  <script>
+  
+    var button01 = new TouchLib.ToggleButton({
+    elementId: 'toggleButton1',
+    on: {
+      innerHTML: 'B1 ON',
+      border: '3px solid #2222cc',
+      background: '#666699',
+      color: '#222222'
+    },
+    off: {
+      innerHTML: 'B1 OFF',
+      border: '3px solid #cc2222',
+      background: '#996666',
+      color: '#222222'
+    },
+    cssClassName: 'button',
+    notify: function (val) {
+      console.log('button val: ', val);
+    }
+  });
+
+  var button02 = new TouchLib.ToggleButton({
+    elementId: 'toggleButton2',
+    on: {
+      innerHTML: 'B2 ON',
+      border: '3px solid #2222cc',
+      background: '#666699',
+      color: '#222222'
+    },
+    off: {
+      innerHTML: 'B2 OFF',
+      border: '3px solid #cc2222',
+      background: '#996666',
+      color: '#222222'
+    },
+    cssClassName: 'button',
+    notify: function (val) {
+      console.log('button val: ', val);
+    }
+  });
+
+  </script>
+</body>
+</html>

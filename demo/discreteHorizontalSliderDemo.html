@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Discrete Horizontal Slider Demo</title>
+  <style>
+    body
+    {
+      font-family: helvetica, arial, sans-serif;
+      font-size: 1.3em;
+      color: #cccccc;
+      background: #222222;
+    }
+    .parent
+    {
+      width: 360px;
+      touch-action: none;
+      -ms-touch-action: none;
+    }
+    .container
+    {
+      margin-left: 20px;
+    }
+    .horizSliderClass
+    {
+      margin-top: 20px;
+      margin-left: 10px;
+      line-height: 40px;
+      float: left;
+    }
+  </style>
+
+  <script src="../touchLib.js"></script>
+</head>
+<body>
+  
+  <div class="parent">
+    <div class="container" id="hvSlider1"></div>
+    <div class="container" id="hvSlider2"></div>
+    <div class="container" id="hvSlider3"></div>
+  </div>
+
+  <script>
+  
+    var hvSlider1 = new TouchLib.DiscreteHorizSlider({
+      elementId: 'hvSlider1',
+      label: 'aLabel',
+      fillstyle: '#3366dd',
+      width: 200,
+      height: 40,
+      numBins: 6,
+      outputIsOverridden: true,
+      initVal: 0,
+      cssClass: 'horizSliderClass',
+      sliderCss: {
+        background: '#444477',
+        border: '2px solid #0033cc',
+        borderRadius: '4px',
+      },
+      notify: function (val) {
+        this.outputEl.innerHTML = val;
+        console.log('hvSlider1 val: ', val);
+      }
+    });
+
+    var hvSlider2 = new TouchLib.DiscreteHorizSlider({
+      elementId: 'hvSlider2',
+      label: 'bLabel',
+      fillstyle: '#33dd66',
+      binBorderColor: '#2222cc',
+      width: 200,
+      height: 40,
+      outputIsOverridden: true,
+      initVal: 0.5,
+      numBins: 12,
+      cssClass: 'horizSliderClass',
+      sliderCss: {
+        background: '#666677',
+        border: '2px solid #2222cc',
+        borderRadius: '6px',
+      },
+      notify: function (val) {
+        this.outputEl.innerHTML = val;
+        console.log('hvSlider2 val: ', val);
+      }
+    });
+
+    var hvSlider3 = new TouchLib.DiscreteHorizSlider({
+      elementId: 'hvSlider3',
+      label: 'cLabel',
+      fillstyle: '#3366dd',
+      width: 200,
+      height: 40,
+      initVal: 1.0,
+      numBins: 6,
+      outputIsOverridden: true,
+      cssClass: 'horizSliderClass',
+      sliderCss: {
+        background: '#444477',
+        border: '2px solid #0033cc',
+        borderRadius: '4px',
+      },
+      notify: function (val) {
+        this.outputEl.innerHTML = val;
+        console.log('hvSlider3 val:', val);
+      }
+    });
+
+  </script>
+</body>
+</html>
