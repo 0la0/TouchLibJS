@@ -89,7 +89,7 @@
         border: '2px solid #0033cc',
         borderRadius: '4px',
       },
-      update: function (val) {
+      notify: function (val) {
         console.log('aSlider val:', val);
       }
     });
@@ -109,7 +109,7 @@
         border: '2px solid #2222cc',
         borderRadius: '6px',
       },
-      update: function (val) {
+      notify: function (val) {
         this.outputEl.innerHTML = this.numBins - 1 - val;
         console.log('discreteV val: ', val);
       }
@@ -128,7 +128,7 @@
         border: '2px solid #0033cc',
         borderRadius: '4px',
       },
-      update: function (val) {
+      notify: function (val) {
         console.log('cSlider val:', val);
       }
     });
@@ -147,7 +147,7 @@
         borderRadius: '4px',
       },
       cssClass: 'horizSliderClass',
-      update: function (val) {
+      notify: function (val) {
         val = (Math.round(val * 40) - 20) * 1;
         console.log('dSlider val: ', val);
         this.outputEl.innerHTML = val;
@@ -169,7 +169,7 @@
         borderRadius: '6px',
       },
       cssClass: 'horizSliderClass',
-      update: function (val) {
+      notify: function (val) {
         console.log('discreteH val: ', val);
       }
     });
@@ -199,7 +199,7 @@
       float: 'left',
       marginLeft: '20px'
     },
-    update: function (val) {
+    notify: function (val) {
       console.log('button val: ', val);
     }
   });
@@ -229,7 +229,7 @@
       float: 'left',
       marginLeft: '10px'
     },
-    update: function (val) {
+    notify: function (val) {
       console.log('button val: ', val);
     }
   });
@@ -260,7 +260,7 @@
       float: 'left',
       marginLeft: '20px'
     },
-    update: function (val) {
+    notify: function (val) {
       console.log('button03 trigger!');
     }
   });
@@ -291,7 +291,7 @@
       float: 'left',
       marginLeft: '10px'
     },
-    update: function (val) {
+    notify: function (val) {
        console.log('button04 trigger!');
     }
   });
