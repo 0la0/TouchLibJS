@@ -1,0 +1,1 @@
+cat meta/header.js slider/slider.js slider/verticalSlider.js slider/horizontalSlider.js slider/discreteVerticalSlider.js slider/discreteHorizontalSlider.js button/button.js button/toggleButton.js button/triggerButton.js meta/footer.js > ../touchLib.js
