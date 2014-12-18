@@ -11,35 +11,21 @@
    *
    ***************************************************************/
 
-  var Slider = function (params) {
-    if (params == undefined) {
-      console.log('no params in parent constructor');
-      return;
-    }
+  /**********************************
+   *  Slider Extends Canvas Object  *
+   **********************************/
+  Slider.prototype = new CanvasObject();
+  Slider.prototype.constructor = Slider;
+  function Slider (params) {
+    if (params == undefined) return;
     
     if (typeof(params.notify) == 'function') {
       this.notify = params.notify;
     } else {
-      throw 'constructon needs an notify function to be useful';
+      throw 'constructor needs a notify function to be useful';
       return;
     }
-
-    var parentEl;
-    if (params.elementId != undefined) {
-      try {
-        parentEl = document.getElementById(params.elementId);
-        if (parentEl == null) {
-          throw 'cannot build button: param object needs an elementId';
-          return;
-        }
-      } catch (err) {
-        console.log('err getting element');
-      }
-    } else {
-      throw 'cannot build button: param object needs an elementId';
-      return; 
-    }
-
+    
     if (params.label == undefined) {
       params.label = '';
     }
@@ -67,25 +53,19 @@
       this.outputIsOverridden = false;
     }
 
+    CanvasObject.call(this, params);
     this.labelEl = document.createElement('div');
     this.labelEl.appendChild(document.createTextNode(params.label));
-    this.canvasEl = document.createElement('canvas');
     this.outputEl = document.createElement('div');
-    parentEl.appendChild(this.labelEl);
-    parentEl.appendChild(this.canvasEl);
-    parentEl.appendChild(this.outputEl);
+    this.parentEl.insertBefore(this.labelEl, this.canvasEl);
+    this.parentEl.appendChild(this.outputEl);
 
     this.val = 0;
     this.lastVal = 0;
-    this.width = params.width;
-    this.height = params.height;
-    this.canvasEl.width;
-    this.canvasEl.height;
-    this.fillstyle = params.fillstyle;
     this.g2d = this.canvasEl.getContext('2d');
-    this.setSize(this.width, this.height);
+    this.setSize(params.width, params.height);
     this.g2d.clearRect(0, 0, this.width, this.height);
-    this.g2d.fillStyle = this.fillstyle;
+    this.g2d.fillStyle = params.fillstyle;
     this.mouseIsDown = false;
     this.rafIsInQueue = false;
     
@@ -105,19 +85,6 @@
     } else {
       this.setValue(params.initVal);
     }
-  }
-
-  /**
-   *  SET THE SIZE OF THE UI ELEMENT
-   **/
-  Slider.prototype.setSize = function (width, height) {
-    this.width = width;
-    this.height = height;
-    this.canvasEl.width = width;
-    this.canvasEl.height = height;
-    this.g2d.width = this.canvasEl.width;
-    this.g2d.height = this.canvasEl.height;
-    this.g2d.fillStyle = this.fillstyle;
   }
 
   /**
