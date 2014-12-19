@@ -50,7 +50,6 @@
     this.currentBin = b;
     if (this.currentBin != this.lastBin) {
       Slider.prototype.setVal.call(this, val);
-      this.lastBin = this.currentBin;
     }
     
   }
@@ -65,8 +64,8 @@
   /**
    *  HORIZONTAL SPECIFIC RENDER
    **/
-  DiscreteHorizSlider.prototype.renderVal = function () {
-    Slider.prototype.renderVal.call(this);
+  DiscreteHorizSlider.prototype.render = function () {
+    Slider.prototype.render.call(this);
     this.g2d.clearRect(
       Math.floor(this.lastBin * this.binSize) + this.lineWidth, 0, 
       this.renderWidth, this.height
@@ -75,6 +74,8 @@
       Math.floor(this.currentBin * this.binSize) + this.lineWidth, 0, 
       this.renderWidth, this.height
     );
+    this.lastBin = this.currentBin;
+    this.renderIsInQueue = false;
   }
 
   /**

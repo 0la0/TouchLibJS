@@ -25,6 +25,9 @@
     this.g2d = this.canvasEl.getContext('2d');
     this.setSize(params.width, params.height);
     this.g2d.clearRect(0, 0, this.width, this.height);
+
+    this.mouseIsDown = false;
+    this.renderIsInQueue = false;
   }
 
   /**
@@ -40,4 +43,21 @@
     this.g2d.width = this.canvasEl.width;
     this.g2d.height = this.canvasEl.height;
   }
+
+  /**
+   *  FUNCTION WRAPPER FOR REQUEST ANIMATION FRAME
+   *  child objects must implement a render function and
+   *  it must set renderIsInQueue to false when finished 
+   **/
+  CanvasObject.prototype.requestRender = function () {
+    if (!this.renderIsInQueue) {
+      this.renderIsInQueue = true;
+      var self = this;
+      requestAnimationFrame(function () {
+        self.render();
+      });
+    }
+  }
+
+  CanvasObject.prototype.render = function () {}
 

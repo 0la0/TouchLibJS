@@ -50,7 +50,6 @@
     this.currentBin = b;
     if (this.currentBin != this.lastBin) {
       Slider.prototype.setVal.call(this, val);
-      this.lastBin = this.currentBin;
     }
     
   }
@@ -65,8 +64,8 @@
   /**
    *  VERTICAL SPECIFIC RENDER
    **/
-  DiscreteVertSlider.prototype.renderVal = function () {
-    Slider.prototype.renderVal.call(this);
+  DiscreteVertSlider.prototype.render = function () {
+    Slider.prototype.render.call(this);
     this.g2d.clearRect(
       0, Math.floor(this.lastBin * this.binSize) + this.lineWidth,
       this.width, this.renderHeight
@@ -75,6 +74,8 @@
       0, Math.floor(this.currentBin * this.binSize) + this.lineWidth,
       this.width, this.renderHeight
     );
+    this.lastBin = this.currentBin;
+    this.renderIsInQueue = false;
   }
 
   /**

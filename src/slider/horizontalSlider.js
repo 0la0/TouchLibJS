@@ -31,10 +31,12 @@
   /**
    *  HORIZONTAL SPECIFIC RENDER
    **/
-  HorizSlider.prototype.renderVal = function () {
-    Slider.prototype.renderVal.call(this);
+  HorizSlider.prototype.render = function () {
+    Slider.prototype.render.call(this);
     this.g2d.clearRect(this.lastVal - 11, 0, 22, this.height);
     this.g2d.fillRect(this.val - 10, 0, 20, this.height);
+    this.lastVal = this.val;
+    this.renderIsInQueue = false;
   }
 
   /**

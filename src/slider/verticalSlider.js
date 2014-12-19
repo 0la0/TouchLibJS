@@ -31,10 +31,12 @@
   /**
    *  VERTICAL SPECIFIC RENDER
    **/
-  VertSlider.prototype.renderVal = function () {
-    Slider.prototype.renderVal.call(this);
+  VertSlider.prototype.render = function () {
+    Slider.prototype.render.call(this);
     this.g2d.clearRect(0, this.height - this.lastVal - 11, this.width, 22);
     this.g2d.fillRect(0, this.height - this.val - 10, this.width, 20);
+    this.lastVal = this.val;
+    this.renderIsInQueue = false;
   }
 
 

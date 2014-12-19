@@ -29,6 +29,9 @@
     this.g2d = this.canvasEl.getContext('2d');
     this.setSize(params.width, params.height);
     this.g2d.clearRect(0, 0, this.width, this.height);
+
+    this.mouseIsDown = false;
+    this.renderIsInQueue = false;
   }
 
   /**
@@ -44,6 +47,23 @@
     this.g2d.width = this.canvasEl.width;
     this.g2d.height = this.canvasEl.height;
   }
+
+  /**
+   *  FUNCTION WRAPPER FOR REQUEST ANIMATION FRAME
+   *  child objects must implement a render function and
+   *  it must set renderIsInQueue to false when finished 
+   **/
+  CanvasObject.prototype.requestRender = function () {
+    if (!this.renderIsInQueue) {
+      this.renderIsInQueue = true;
+      var self = this;
+      requestAnimationFrame(function () {
+        self.render();
+      });
+    }
+  }
+
+  CanvasObject.prototype.render = function () {}
 
   /****************************************************************
    *
@@ -113,8 +133,8 @@
     this.setSize(params.width, params.height);
     this.g2d.clearRect(0, 0, this.width, this.height);
     this.g2d.fillStyle = params.fillstyle;
-    this.mouseIsDown = false;
-    this.rafIsInQueue = false;
+    //this.mouseIsDown = false;
+    //this.rafIsInQueue = false;
     
     //set style
     if (params.sliderCss != undefined) {
@@ -169,9 +189,10 @@
     if (val < 0) {
       val = 0;
     }
-    this.lastVal = this.val;
+    //this.lastVal = this.val;
     this.val = val;
     this.notify(this.getVal());
+    /*
     if (!this.rafIsInQueue) {
       this.rafIsInQueue = true;
       var update = this.renderVal();
@@ -179,17 +200,18 @@
         update;
       });
     }
+    */
+    this.requestRender();
   }
 
   /**
    *  COMMON RENDER VALUE PROCEDURES
    **/
-  Slider.prototype.renderVal = function () {
+  Slider.prototype.render = function () {
     if (!this.outputIsOverridden) {
-      //console.log('setting in self');
       this.outputEl.innerHTML = this.getVal();  
     }
-    this.rafIsInQueue = false;
+    //this.renderIsInQueue = false;
   }
 
   /**
@@ -248,10 +270,12 @@
   /**
    *  VERTICAL SPECIFIC RENDER
    **/
-  VertSlider.prototype.renderVal = function () {
-    Slider.prototype.renderVal.call(this);
+  VertSlider.prototype.render = function () {
+    Slider.prototype.render.call(this);
     this.g2d.clearRect(0, this.height - this.lastVal - 11, this.width, 22);
     this.g2d.fillRect(0, this.height - this.val - 10, this.width, 20);
+    this.lastVal = this.val;
+    this.renderIsInQueue = false;
   }
 
 
@@ -332,10 +356,12 @@
   /**
    *  HORIZONTAL SPECIFIC RENDER
    **/
-  HorizSlider.prototype.renderVal = function () {
-    Slider.prototype.renderVal.call(this);
+  HorizSlider.prototype.render = function () {
+    Slider.prototype.render.call(this);
     this.g2d.clearRect(this.lastVal - 11, 0, 22, this.height);
     this.g2d.fillRect(this.val - 10, 0, 20, this.height);
+    this.lastVal = this.val;
+    this.renderIsInQueue = false;
   }
 
   /**
@@ -430,7 +456,6 @@
     this.currentBin = b;
     if (this.currentBin != this.lastBin) {
       Slider.prototype.setVal.call(this, val);
-      this.lastBin = this.currentBin;
     }
     
   }
@@ -445,8 +470,8 @@
   /**
    *  VERTICAL SPECIFIC RENDER
    **/
-  DiscreteVertSlider.prototype.renderVal = function () {
-    Slider.prototype.renderVal.call(this);
+  DiscreteVertSlider.prototype.render = function () {
+    Slider.prototype.render.call(this);
     this.g2d.clearRect(
       0, Math.floor(this.lastBin * this.binSize) + this.lineWidth,
       this.width, this.renderHeight
@@ -455,6 +480,8 @@
       0, Math.floor(this.currentBin * this.binSize) + this.lineWidth,
       this.width, this.renderHeight
     );
+    this.lastBin = this.currentBin;
+    this.renderIsInQueue = false;
   }
 
   /**
@@ -550,7 +577,6 @@
     this.currentBin = b;
     if (this.currentBin != this.lastBin) {
       Slider.prototype.setVal.call(this, val);
-      this.lastBin = this.currentBin;
     }
     
   }
@@ -565,8 +591,8 @@
   /**
    *  HORIZONTAL SPECIFIC RENDER
    **/
-  DiscreteHorizSlider.prototype.renderVal = function () {
-    Slider.prototype.renderVal.call(this);
+  DiscreteHorizSlider.prototype.render = function () {
+    Slider.prototype.render.call(this);
     this.g2d.clearRect(
       Math.floor(this.lastBin * this.binSize) + this.lineWidth, 0, 
       this.renderWidth, this.height
@@ -575,6 +601,8 @@
       Math.floor(this.currentBin * this.binSize) + this.lineWidth, 0, 
       this.renderWidth, this.height
     );
+    this.lastBin = this.currentBin;
+    this.renderIsInQueue = false;
   }
 
   /**

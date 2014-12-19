@@ -66,8 +66,8 @@
     this.setSize(params.width, params.height);
     this.g2d.clearRect(0, 0, this.width, this.height);
     this.g2d.fillStyle = params.fillstyle;
-    this.mouseIsDown = false;
-    this.rafIsInQueue = false;
+    //this.mouseIsDown = false;
+    //this.rafIsInQueue = false;
     
     //set style
     if (params.sliderCss != undefined) {
@@ -122,9 +122,10 @@
     if (val < 0) {
       val = 0;
     }
-    this.lastVal = this.val;
+    //this.lastVal = this.val;
     this.val = val;
     this.notify(this.getVal());
+    /*
     if (!this.rafIsInQueue) {
       this.rafIsInQueue = true;
       var update = this.renderVal();
@@ -132,17 +133,18 @@
         update;
       });
     }
+    */
+    this.requestRender();
   }
 
   /**
    *  COMMON RENDER VALUE PROCEDURES
    **/
-  Slider.prototype.renderVal = function () {
+  Slider.prototype.render = function () {
     if (!this.outputIsOverridden) {
-      //console.log('setting in self');
       this.outputEl.innerHTML = this.getVal();  
     }
-    this.rafIsInQueue = false;
+    //this.renderIsInQueue = false;
   }
 
   /**
