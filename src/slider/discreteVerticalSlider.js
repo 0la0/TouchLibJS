@@ -1,12 +1,12 @@
 
   /************************************************
    *           DISCRETE VERTICAL SLIDER
-   *           INHERITS VERTICAL SLIDER
+   *           EXTENDS  VERTICAL SLIDER
    ***********************************************/
   DiscreteVertSlider.prototype = new Slider();
   DiscreteVertSlider.prototype.constructor = HorizSlider; 
   function DiscreteVertSlider (params) {
-    if (params.numBins == undefined) {
+    if (!params.numBins) {
       throw 'discrete vertical slider needs an integer number of bins';
       return;
     }
@@ -17,6 +17,7 @@
     this.currentBin = 0;
     this.lastBin = -99;
     this.binBorderColor = params.binBorderColor;
+    
     Slider.call(this, params);
     this.registerListeners(this);
 

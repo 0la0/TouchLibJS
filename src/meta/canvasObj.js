@@ -3,8 +3,8 @@
    *  Parent object for all canvas based widgets  *
    ************************************************/
   function CanvasObject (params) {
-    if (params == undefined) return;
-    if (params.elementId != undefined) {
+    if (!params) return;
+    if (params.elementId) {
       try {
         this.parentEl = document.getElementById(params.elementId);
         if (this.parentEl == null) {
@@ -21,6 +21,10 @@
 
     this.canvasEl = document.createElement('canvas');
     this.parentEl.appendChild(this.canvasEl);
+
+    if (params.cssClass) {
+      this.setClass(params.cssClass);
+    }
 
     this.g2d = this.canvasEl.getContext('2d');
     this.setSize(params.width, params.height);
@@ -61,3 +65,10 @@
 
   CanvasObject.prototype.render = function () {}
 
+  CanvasObject.prototype.setClass = function (className) {
+    if (!className) {
+      console.log('error: no class given');
+      return; 
+    }
+    this.canvasEl.className = className;
+  }

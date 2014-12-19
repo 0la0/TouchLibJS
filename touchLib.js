@@ -7,8 +7,8 @@
    *  Parent object for all canvas based widgets  *
    ************************************************/
   function CanvasObject (params) {
-    if (params == undefined) return;
-    if (params.elementId != undefined) {
+    if (!params) return;
+    if (params.elementId) {
       try {
         this.parentEl = document.getElementById(params.elementId);
         if (this.parentEl == null) {
@@ -25,6 +25,10 @@
 
     this.canvasEl = document.createElement('canvas');
     this.parentEl.appendChild(this.canvasEl);
+
+    if (params.cssClass) {
+      this.setClass(params.cssClass);
+    }
 
     this.g2d = this.canvasEl.getContext('2d');
     this.setSize(params.width, params.height);
@@ -65,7 +69,13 @@
 
   CanvasObject.prototype.render = function () {}
 
-  /****************************************************************
+  CanvasObject.prototype.setClass = function (className) {
+    if (!className) {
+      console.log('error: no class given');
+      return; 
+    }
+    this.canvasEl.className = className;
+  }  /****************************************************************
    *
    *  HTML5 UI SLIDER
    *  IMPLEMENTED ON A CANVAS GRAPHICS CONTEXT
@@ -84,7 +94,7 @@
   Slider.prototype = new CanvasObject();
   Slider.prototype.constructor = Slider;
   function Slider (params) {
-    if (params == undefined) return;
+    if (!params) return;
     
     if (typeof(params.notify) == 'function') {
       this.notify = params.notify;
@@ -93,37 +103,34 @@
       return;
     }
     
-    if (params.label == undefined) {
-      params.label = '';
-    }
-    if (params.fillstyle == undefined) {
-      fillstyle = '#666666';
-    }
+    if (!params.label) params.label = '';
+    if (!params.fillstyle) params.fillstyle = '#666666'
 
-    if (params.width == undefined || params.width == isNaN) {
+    if (!params.width) {
       if (this instanceof VertSlider) {
         params.width = 20;
       } else {
         params.height = 100;
       }
     }
-    if (params.height == undefined || params.height == isNaN) {
+    if (!params.height) {
       if (this instanceof VertSlider) {
         params.height = 100;
       } else {
         params.height = 20;
       }
     }
-    if (params.outputIsOverridden != undefined) {
+    if (params.outputIsOverridden) {
       this.outputIsOverridden = params.outputIsOverridden;
     } else {
       this.outputIsOverridden = false;
     }
-
-    CanvasObject.call(this, params);
     this.labelEl = document.createElement('div');
-    this.labelEl.appendChild(document.createTextNode(params.label));
     this.outputEl = document.createElement('div');
+    
+    CanvasObject.call(this, params);
+
+    this.labelEl.appendChild(document.createTextNode(params.label));
     this.parentEl.insertBefore(this.labelEl, this.canvasEl);
     this.parentEl.appendChild(this.outputEl);
 
@@ -133,24 +140,18 @@
     this.setSize(params.width, params.height);
     this.g2d.clearRect(0, 0, this.width, this.height);
     this.g2d.fillStyle = params.fillstyle;
-    //this.mouseIsDown = false;
-    //this.rafIsInQueue = false;
     
     //set style
-    if (params.sliderCss != undefined) {
+    if (params.sliderCss) {
       for (var key in params.sliderCss) {
         this.canvasEl.style[key] = params.sliderCss[key];
       }
     } 
 
-    if (params.cssClass != undefined) {
-      this.setClass(params.cssClass);
-    }
-
-    if (params.initVal == undefined) {
-      this.setValue(0);
-    } else {
+    if (params.initVal) {
       this.setValue(params.initVal);
+    } else {
+      this.setValue(0);
     }
   }
 
@@ -158,12 +159,12 @@
    *  SETS THE CSS CLASS OF THE SLIDER ELEMENTS
    **/
   Slider.prototype.setClass = function (className) {
-    if (className == null) {
-      console.log('error: no class given');
+    CanvasObject.prototype.setClass.call(this, className);
+    if (!className) {
+      console.log('slider set class error: no class given');
       return; 
     }
     this.labelEl.className = className;
-    this.canvasEl.className = className;
     this.outputEl.className = className;
   }
 
@@ -172,7 +173,7 @@
    **/
   Slider.prototype.setValue = function (val) {
     if (val < 0 || val > 1) {
-      console.log('error: input value outOfBounds, try [0 - 1]');
+      console.log('slider set value input outOfBounds, try [0 - 1]');
       return;
     }
     if (this instanceof VertSlider) {
@@ -189,18 +190,8 @@
     if (val < 0) {
       val = 0;
     }
-    //this.lastVal = this.val;
     this.val = val;
     this.notify(this.getVal());
-    /*
-    if (!this.rafIsInQueue) {
-      this.rafIsInQueue = true;
-      var update = this.renderVal();
-      requestAnimationFrame(function () {
-        update;
-      });
-    }
-    */
     this.requestRender();
   }
 
@@ -211,7 +202,6 @@
     if (!this.outputIsOverridden) {
       this.outputEl.innerHTML = this.getVal();  
     }
-    //this.renderIsInQueue = false;
   }
 
   /**
@@ -240,7 +230,7 @@
 
   /************************************************
    *            VERTICAL SLIDER
-   *            INHERITS SLIDER
+   *            EXTENDS  SLIDER
    ***********************************************/
   VertSlider.prototype = new Slider();
   VertSlider.prototype.constructor = VertSlider;
@@ -326,7 +316,7 @@
 
   /************************************************
    *            HORIZONTAL SLIDER
-   *            INHERITS SLIDER
+   *            EXTENDS    SLIDER
    ***********************************************/
   HorizSlider.prototype = new Slider();
   HorizSlider.prototype.constructor = HorizSlider; 
@@ -407,12 +397,12 @@
 
   /************************************************
    *           DISCRETE VERTICAL SLIDER
-   *           INHERITS VERTICAL SLIDER
+   *           EXTENDS  VERTICAL SLIDER
    ***********************************************/
   DiscreteVertSlider.prototype = new Slider();
   DiscreteVertSlider.prototype.constructor = HorizSlider; 
   function DiscreteVertSlider (params) {
-    if (params.numBins == undefined) {
+    if (!params.numBins) {
       throw 'discrete vertical slider needs an integer number of bins';
       return;
     }
@@ -423,6 +413,7 @@
     this.currentBin = 0;
     this.lastBin = -99;
     this.binBorderColor = params.binBorderColor;
+    
     Slider.call(this, params);
     this.registerListeners(this);
 
@@ -528,12 +519,12 @@
 
   /************************************************
    *         DISCRETE HORIZONTAL SLIDER
-   *         INHERITS HORIZONTAL SLIDER
+   *         EXTENDS  HORIZONTAL SLIDER
    ***********************************************/
   DiscreteHorizSlider.prototype = new Slider();
   DiscreteHorizSlider.prototype.constructor = HorizSlider; 
   function DiscreteHorizSlider (params) {
-    if (params.numBins == undefined) {
+    if (!params.numBins) {
       throw 'discrete horizontal slider needs an integer number of bins';
       return;
     }
@@ -544,6 +535,7 @@
     this.currentBin = 0;
     this.lastBin = -99;
     this.binBorderColor = params.binBorderColor;
+    
     Slider.call(this, params);
     this.registerListeners(this);
 
@@ -658,17 +650,14 @@
    ***************************************************************/
 
   var Button = function (params) {
-    if (params == undefined) {
-      console.log('no params in parent constructor');
-      return;
-    }
+    if (!params) return;
     this.val;
     this.notify;
     this.element;
     this.on;
     this.off;
     
-    if (params.elementId != undefined) {
+    if (params.elementId) {
       try {
         this.element = document.getElementById(params.elementId);
         if (this.element == null) {
@@ -690,23 +679,23 @@
       return;
     }
 
-    if (params.on != undefined) {
+    if (params.on) {
       this.on = params.on;
     } else {
       throw 'pram object needs on attributes';
     }
 
-    if (params.off != undefined) {
+    if (params.off) {
       this.off = params.off;
     } else {
       throw 'pram object needs off attributes';
     }
 
-    if (params.cssClassName != undefined) {
+    if (params.cssClassName) {
       this.setClass(params.cssClassName);
     }
 
-    if (params.css != undefined) {
+    if (params.css) {
       for (var key in params.css) {
         this.element.style[key] = params.css[key];
       }
@@ -779,15 +768,13 @@
   }
 
     //----------------------------------------//
-   //     TOGGLE BUTTON INHERITS BUTTON      //
+   //     TOGGLE BUTTON EXTENDS BUTTON       //
   //----------------------------------------//
   ToggleButton.prototype = new Button();
   ToggleButton.prototype.constructor = ToggleButton;
   function ToggleButton (params) {
     Button.call(this, params);
-    //this.otherMethodCalls();
-    //this.registerListeners(this);
-    if (params.val != undefined) {
+    if (params.val) {
       this.setVal(params.val);
     } else {
       this.setVal(false);
@@ -812,7 +799,7 @@
 
 
     //----------------------------------------//
-   //    TRIGGER BUTTON INHERITS BUTTON      //
+   //    TRIGGER BUTTON EXTENDS BUTTON       //
   //----------------------------------------//
   TriggerButton.prototype = new Button();
   TriggerButton.prototype.constructor = TriggerButton;
@@ -833,9 +820,7 @@
     this.notify();
     //turn on
     this.render(true);
-    //if (this.timeout != undefined) {
-      clearTimeout(this.timeout);
-    //}
+    clearTimeout(this.timeout);
     var self = this;
     this.timeout = setTimeout(function () {
       //turn off
@@ -843,12 +828,258 @@
     }, self.timeoutTime);
   }
 
+
+  /************************************
+   *  Slider2D Extends Canvas Object  *
+   ************************************/
+  Slider2D.prototype = new CanvasObject();
+  Slider2D.prototype.constructor = Slider2D;
+  function Slider2D (params) {
+    if (!params) return;
+    CanvasObject.call(this, params);
+    
+    if (!params.cssClass) {
+      this.canvasEl.style.background = '#ffffff';
+      this.canvasEl.style.border = '1px solid #333333';  
+    }
+    this.g2d.clearRect(0, 0, this.width, this.height);
+    this.g2d.fillStyle = params.fillStyle;
+    this.isMigrating = false;
+    this.notify = params.notify;
+    this.cvsPos = {
+      thisX: 0,
+      thisY: 0,
+      prevX: 0,
+      prevY: 0
+    };
+    this.normalVal = {x: 0, y: 0};
+    if (params.radius == undefined) {
+      this.cvsPos.radius = 20;
+    }
+    else {
+      this.cvsPos.radius = params.radius;
+    }
+    this.cvsPos.radius2 = this.cvsPos.radius * 2;
+    this.twoPi = 2 * Math.PI;
+    this.registerListeners(this);
+    this.setNormalPosition(0.5, 0.5);
+  }
+
+  /**
+   *  SLIDER2D LISTENERS
+   **/
+  Slider2D.prototype.registerListeners = function (self) {
+    self.canvasEl.addEventListener('mousedown', function (e) {
+      e.preventDefault();
+      self.isMigrating = false;
+      self.mouseIsDown = true;
+      self.processMouseTouch(
+        e.pageX - this.offsetLeft,
+        e.pageY - this.offsetTop
+      );
+    }, false);
+    self.canvasEl.addEventListener('mousemove', function (e) {
+      e.preventDefault();
+      if (self.mouseIsDown){
+        self.processMouseTouch(
+          e.pageX - this.offsetLeft,
+          e.pageY - this.offsetTop
+        );
+      }
+    }, false);
+    self.canvasEl.addEventListener('mouseup', function (e) {
+      e.preventDefault();
+      self.mouseIsDown = false;
+      if (self instanceof Joystick) {
+        self.isMigrating = true;
+        self.migrate();
+      }
+    }, false);
+    
+    self.canvasEl.addEventListener('touchstart', function (e) {
+      e.preventDefault();
+      for (var i = 0; i < e.touches.length; i++) {
+        if (e.touches[i].target === this) {
+          self.processMouseTouch(
+            e.touches[i].pageX - this.offsetLeft,
+            e.touches[i].pageY - this.offsetTop
+          );
+        }
+      }
+    }, false);
+    self.canvasEl.addEventListener('touchmove', function (e) {
+      e.preventDefault();
+      for (var i = 0; i < e.touches.length; i++) {
+        if (e.touches[i].target === this) {
+          self.processMouseTouch(
+            e.touches[i].pageX - this.offsetLeft,
+            e.touches[i].pageY - this.offsetTop
+          );
+        }
+      }
+    }, false);
+  }
+
+  /**
+   *  PROCESS MOUSE OR TOUCH COORDINATE DATA
+   **/
+  Slider2D.prototype.processMouseTouch = function (x, y) {
+    if (x < 0) x = 0;
+    else if (x >= this.width) {
+      x = this.width - 1;
+    }
+    if (y < 0) y = 0;
+    else if (y >= this.height) {
+      y = this.height - 1;
+    }
+    this.cvsPos.thisX = x;
+    this.cvsPos.thisY = y;
+    this.setRealPosition(x, y);
+    this.requestRender();
+  }
+
+  Slider2D.prototype.render = function () {
+    //clear last pos
+    this.g2d.clearRect(
+      this.cvsPos.prevX - this.cvsPos.radius - 1, 
+      this.cvsPos.prevY - this.cvsPos.radius - 1,
+      this.cvsPos.radius2 + 2, this.cvsPos.radius2 + 2
+    );
+    //render this pos
+    this.g2d.beginPath();
+    this.g2d.arc(
+      this.cvsPos.thisX, this.cvsPos.thisY, 
+      this.cvsPos.radius, 0, this.twoPi
+    );
+    this.g2d.closePath();
+    this.g2d.fill();
+    this.cvsPos.prevX = this.cvsPos.thisX;
+    this.cvsPos.prevY = this.cvsPos.thisY;
+    if (this instanceof Joystick) return;
+    this.renderIsInQueue = false;
+  }
+
+  /**
+   *  SET VALUE [0 - WIDTH and HEIGHT]
+   **/
+  Slider2D.prototype.setRealPosition = function (x, y) {
+    this.normalVal.x = x / this.width;
+    this.normalVal.y = (this.height - y) / this.height;
+    if (this instanceof Joystick) return;
+    this.notify({x: this.normalVal.x, y: this.normalVal.y});
+  }
+
+  /**
+   *  SET VALUE [0 - 1]
+   **/
+  Slider2D.prototype.setNormalPosition = function (x, y) {
+    this.processMouseTouch(x * this.width, this.height - y * this.height);
+  }
+
+  /**
+   *  RETURN SLIDER POSITION VALUE [0 - WIDTH and HEIGHT]
+   **/
+  Slider2D.prototype.getRealVal = function () {
+    return {x: this.cvsPos.thisX, y: this.cvsPos.thisY};
+  }
+
+  /**
+   *  RETURN NORMALIZED VALUE [0 - 1]
+   **/
+  Slider2D.prototype.getNormalVal = function () {
+    return this.normalVal;
+  }
+
+
+
+  /*******************************
+   *  Joystick Extends Slider2D  *
+   *******************************/
+  Joystick.prototype = new Slider2D();
+  Joystick.prototype.constructor = Joystick;
+  function Joystick (params) {
+    if (!params) return;
+    Slider2D.call(this, params);
+    this.registerExtraListener(this);
+    if (!params.crosshairStyle) this.crosshairStyle = '#333333'; 
+    else this.crosshairStyle = params.crosshairStyle;
+  }
+
+  /**
+   *  SET VALUE [0 - WIDTH and HEIGHT]
+   **/
+  Joystick.prototype.setRealPosition = function (x, y) {
+    Slider2D.prototype.setRealPosition.call(this, x, y);
+    this.notify({
+      x: this.normalVal.x - 0.5,
+      y: this.normalVal.y - 0.5
+    });
+  }
+
+  /**
+   *  TOUCHEND CALLS ROUTINE TO ANIMATE BACK TO CENTER
+   **/
+  Joystick.prototype.registerExtraListener = function (self) {
+    self.canvasEl.addEventListener('touchend', function (e) {
+      if (e.touches.length == 0) {
+        self.isMigrating = true;
+        self.migrate();
+      }
+    }, false);
+  }
+
+  /**
+   *  CALL SUPER AND THEN RENDER CROSSHAIRS
+   **/
+  Joystick.prototype.render = function () {
+    Slider2D.prototype.render.call(this);
+    var oldStyle = this.g2d.fillStyle;
+    this.g2d.fillStyle = this.crosshairStyle;
+    this.g2d.beginPath();
+    this.g2d.moveTo(this.halfWidth, 0);
+    this.g2d.lineTo(this.halfWidth, this.height);
+    this.g2d.moveTo(0, this.halfHeight);
+    this.g2d.lineTo(this.width, this.halfHeight);
+    this.g2d.stroke();
+    this.g2d.fillStyle = oldStyle;
+    this.renderIsInQueue = false; 
+  }
+
+  /**
+   *  WHEN MOUSE/FINGER IS LIFTED, ANIMATE BACK TO CENTER
+   **/
+  Joystick.prototype.migrate = function () {
+    var magnitude = 0.3;
+    var deltaX = 0 - (this.normalVal.x - 0.5);
+    var deltaY = 0 - (this.normalVal.y - 0.5);
+    var distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    //if distance is greater than threshold
+    //calculate vector toward center and migrate
+    if (distance > 0.05) {
+      var x = this.normalVal.x + (magnitude * deltaX);
+      var y = this.normalVal.y + (magnitude * deltaY);
+      this.setNormalPosition(x, y);
+      var self = this;
+      requestAnimationFrame(function () {
+        self.migrate();
+      });
+    }
+    //otherwise set position in center and stop animating
+    else {
+      this.setNormalPosition(0.5, 0.5);
+      this.isMigrating = false;
+    }
+  }
+
+
   TouchLib.VertSlider = VertSlider;
   TouchLib.HorizSlider = HorizSlider;
   TouchLib.DiscreteVertSlider = DiscreteVertSlider;
   TouchLib.DiscreteHorizSlider = DiscreteHorizSlider;
   TouchLib.ToggleButton = ToggleButton;
   TouchLib.TriggerButton = TriggerButton;
+  TouchLib.Slider2D = Slider2D;
+  TouchLib.Joystick = Joystick;
   window.TouchLib = TouchLib;
 
 })(window);

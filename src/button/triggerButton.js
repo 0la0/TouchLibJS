@@ -1,6 +1,6 @@
 
     //----------------------------------------//
-   //    TRIGGER BUTTON INHERITS BUTTON      //
+   //    TRIGGER BUTTON EXTENDS BUTTON       //
   //----------------------------------------//
   TriggerButton.prototype = new Button();
   TriggerButton.prototype.constructor = TriggerButton;
@@ -21,9 +21,7 @@
     this.notify();
     //turn on
     this.render(true);
-    //if (this.timeout != undefined) {
-      clearTimeout(this.timeout);
-    //}
+    clearTimeout(this.timeout);
     var self = this;
     this.timeout = setTimeout(function () {
       //turn off

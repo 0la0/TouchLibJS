@@ -11,17 +11,14 @@
    ***************************************************************/
 
   var Button = function (params) {
-    if (params == undefined) {
-      console.log('no params in parent constructor');
-      return;
-    }
+    if (!params) return;
     this.val;
     this.notify;
     this.element;
     this.on;
     this.off;
     
-    if (params.elementId != undefined) {
+    if (params.elementId) {
       try {
         this.element = document.getElementById(params.elementId);
         if (this.element == null) {
@@ -43,23 +40,23 @@
       return;
     }
 
-    if (params.on != undefined) {
+    if (params.on) {
       this.on = params.on;
     } else {
       throw 'pram object needs on attributes';
     }
 
-    if (params.off != undefined) {
+    if (params.off) {
       this.off = params.off;
     } else {
       throw 'pram object needs off attributes';
     }
 
-    if (params.cssClassName != undefined) {
+    if (params.cssClassName) {
       this.setClass(params.cssClassName);
     }
 
-    if (params.css != undefined) {
+    if (params.css) {
       for (var key in params.css) {
         this.element.style[key] = params.css[key];
       }

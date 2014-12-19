@@ -1,7 +1,7 @@
 
   /************************************************
    *            HORIZONTAL SLIDER
-   *            INHERITS SLIDER
+   *            EXTENDS    SLIDER
    ***********************************************/
   HorizSlider.prototype = new Slider();
   HorizSlider.prototype.constructor = HorizSlider; 

@@ -1,12 +1,12 @@
 
   /************************************************
    *         DISCRETE HORIZONTAL SLIDER
-   *         INHERITS HORIZONTAL SLIDER
+   *         EXTENDS  HORIZONTAL SLIDER
    ***********************************************/
   DiscreteHorizSlider.prototype = new Slider();
   DiscreteHorizSlider.prototype.constructor = HorizSlider; 
   function DiscreteHorizSlider (params) {
-    if (params.numBins == undefined) {
+    if (!params.numBins) {
       throw 'discrete horizontal slider needs an integer number of bins';
       return;
     }
@@ -17,6 +17,7 @@
     this.currentBin = 0;
     this.lastBin = -99;
     this.binBorderColor = params.binBorderColor;
+    
     Slider.call(this, params);
     this.registerListeners(this);
 

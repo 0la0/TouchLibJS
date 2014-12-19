@@ -17,7 +17,7 @@
   Slider.prototype = new CanvasObject();
   Slider.prototype.constructor = Slider;
   function Slider (params) {
-    if (params == undefined) return;
+    if (!params) return;
     
     if (typeof(params.notify) == 'function') {
       this.notify = params.notify;
@@ -26,37 +26,34 @@
       return;
     }
     
-    if (params.label == undefined) {
-      params.label = '';
-    }
-    if (params.fillstyle == undefined) {
-      fillstyle = '#666666';
-    }
+    if (!params.label) params.label = '';
+    if (!params.fillstyle) params.fillstyle = '#666666'
 
-    if (params.width == undefined || params.width == isNaN) {
+    if (!params.width) {
       if (this instanceof VertSlider) {
         params.width = 20;
       } else {
         params.height = 100;
       }
     }
-    if (params.height == undefined || params.height == isNaN) {
+    if (!params.height) {
       if (this instanceof VertSlider) {
         params.height = 100;
       } else {
         params.height = 20;
       }
     }
-    if (params.outputIsOverridden != undefined) {
+    if (params.outputIsOverridden) {
       this.outputIsOverridden = params.outputIsOverridden;
     } else {
       this.outputIsOverridden = false;
     }
-
-    CanvasObject.call(this, params);
     this.labelEl = document.createElement('div');
-    this.labelEl.appendChild(document.createTextNode(params.label));
     this.outputEl = document.createElement('div');
+    
+    CanvasObject.call(this, params);
+
+    this.labelEl.appendChild(document.createTextNode(params.label));
     this.parentEl.insertBefore(this.labelEl, this.canvasEl);
     this.parentEl.appendChild(this.outputEl);
 
@@ -66,24 +63,18 @@
     this.setSize(params.width, params.height);
     this.g2d.clearRect(0, 0, this.width, this.height);
     this.g2d.fillStyle = params.fillstyle;
-    //this.mouseIsDown = false;
-    //this.rafIsInQueue = false;
     
     //set style
-    if (params.sliderCss != undefined) {
+    if (params.sliderCss) {
       for (var key in params.sliderCss) {
         this.canvasEl.style[key] = params.sliderCss[key];
       }
     } 
 
-    if (params.cssClass != undefined) {
-      this.setClass(params.cssClass);
-    }
-
-    if (params.initVal == undefined) {
-      this.setValue(0);
-    } else {
+    if (params.initVal) {
       this.setValue(params.initVal);
+    } else {
+      this.setValue(0);
     }
   }
 
@@ -91,12 +82,12 @@
    *  SETS THE CSS CLASS OF THE SLIDER ELEMENTS
    **/
   Slider.prototype.setClass = function (className) {
-    if (className == null) {
-      console.log('error: no class given');
+    CanvasObject.prototype.setClass.call(this, className);
+    if (!className) {
+      console.log('slider set class error: no class given');
       return; 
     }
     this.labelEl.className = className;
-    this.canvasEl.className = className;
     this.outputEl.className = className;
   }
 
@@ -105,7 +96,7 @@
    **/
   Slider.prototype.setValue = function (val) {
     if (val < 0 || val > 1) {
-      console.log('error: input value outOfBounds, try [0 - 1]');
+      console.log('slider set value input outOfBounds, try [0 - 1]');
       return;
     }
     if (this instanceof VertSlider) {
@@ -122,18 +113,8 @@
     if (val < 0) {
       val = 0;
     }
-    //this.lastVal = this.val;
     this.val = val;
     this.notify(this.getVal());
-    /*
-    if (!this.rafIsInQueue) {
-      this.rafIsInQueue = true;
-      var update = this.renderVal();
-      requestAnimationFrame(function () {
-        update;
-      });
-    }
-    */
     this.requestRender();
   }
 
@@ -144,7 +125,6 @@
     if (!this.outputIsOverridden) {
       this.outputEl.innerHTML = this.getVal();  
     }
-    //this.renderIsInQueue = false;
   }
 
   /**

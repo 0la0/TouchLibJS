@@ -1,14 +1,12 @@
 
     //----------------------------------------//
-   //     TOGGLE BUTTON INHERITS BUTTON      //
+   //     TOGGLE BUTTON EXTENDS BUTTON       //
   //----------------------------------------//
   ToggleButton.prototype = new Button();
   ToggleButton.prototype.constructor = ToggleButton;
   function ToggleButton (params) {
     Button.call(this, params);
-    //this.otherMethodCalls();
-    //this.registerListeners(this);
-    if (params.val != undefined) {
+    if (params.val) {
       this.setVal(params.val);
     } else {
       this.setVal(false);

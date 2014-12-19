@@ -1,7 +1,7 @@
 
   /************************************************
    *            VERTICAL SLIDER
-   *            INHERITS SLIDER
+   *            EXTENDS  SLIDER
    ***********************************************/
   VertSlider.prototype = new Slider();
   VertSlider.prototype.constructor = VertSlider;

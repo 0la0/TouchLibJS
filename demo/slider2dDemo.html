@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Slider Demo</title>
+  <style>
+  	body
+    {
+      font-family: helvetica, arial, sans-serif;
+      font-size: 1.3em;
+      color: #cccccc;
+      background: #222222;
+    }
+    .parent
+    {
+      touch-action: none;
+      -ms-touch-action: none;
+    }
+    .slider2D
+    {
+      margin-top: 20px;
+      margin-left: 20px;
+      border: 3px solid #333399;
+      border-radius: 3px;
+      background: #ccccff;
+    }
+  </style>
+  <script src="../touchLib.js"></script>
+</head>
+<body>
+  <div class="parent">
+    <div id="slider2dElement"></div>
+  </div>
+
+  <script>
+
+    var s2d = new TouchLib.Slider2D({
+      elementId: 'slider2dElement',
+      width: 200,
+      height: 200,
+      cssClass: 'slider2D',
+      fillStyle: '#4444aa',
+      radius: 20,
+      notify: function (vals) {
+        console.log('x: ' + vals.x + ', y: ' + vals.y);
+      } 
+    });
+
+  </script>
+
+</body>
+</html>
