@@ -1,1 +1,15 @@
-cat meta/header.js meta/canvasObj.js slider/slider.js slider/verticalSlider.js slider/horizontalSlider.js slider/discreteVerticalSlider.js slider/discreteHorizontalSlider.js button/button.js button/toggleButton.js button/triggerButton.js slider2d/slider2d.js slider2d/joystick.js meta/footer.js > ../touchLib.js
+files=" meta/header.js"
+files+=" meta/canvasObj.js"
+files+=" slider/slider.js"
+files+=" slider/verticalSlider.js"
+files+=" slider/horizontalSlider.js"
+files+=" slider/discreteVerticalSlider.js"
+files+=" slider/discreteHorizontalSlider.js"
+files+=" button/button.js"
+files+=" button/toggleButton.js"
+files+=" button/triggerButton.js"
+files+=" slider2d/slider2d.js"
+files+=" slider2d/joystick.js"
+files+=" knob/knob.js"
+files+=" meta/footer.js"
+cat $files > ../touchLib.js

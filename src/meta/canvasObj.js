@@ -8,14 +8,14 @@
       try {
         this.parentEl = document.getElementById(params.elementId);
         if (this.parentEl == null) {
-          throw 'cannot build button: param object needs an elementId';
+          throw 'cannot build object: param object needs an elementId';
           return;
         }
       } catch (err) {
         console.log('err getting element');
       }
     } else {
-      throw 'cannot build button: param object needs an elementId';
+      throw 'cannot build object: param object needs an elementId';
       return; 
     }
 
@@ -72,3 +72,4 @@
     }
     this.canvasEl.className = className;
   }
+

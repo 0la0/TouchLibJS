@@ -7,6 +7,7 @@
   TouchLib.TriggerButton = TriggerButton;
   TouchLib.Slider2D = Slider2D;
   TouchLib.Joystick = Joystick;
+  TouchLib.Knob = Knob;
   window.TouchLib = TouchLib;
 
 })(window);
