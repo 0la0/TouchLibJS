@@ -8,6 +8,8 @@
   TouchLib.Slider2D = Slider2D;
   TouchLib.Joystick = Joystick;
   TouchLib.Knob = Knob;
+  TouchLib.SliderFieldHoriz = SliderFieldHoriz;
+  TouchLib.SliderFieldVert = SliderFieldVert;
   window.TouchLib = TouchLib;
 
 })(window);

@@ -991,6 +991,167 @@
   }
 
 
+
+  /***************************************
+   *  SliderField Extends Canvas Object  *
+   ***************************************/
+  SliderField.prototype = new CanvasObject();
+  SliderField.prototype.constructor = SliderField;
+  function SliderField (params) {
+    if (!params) return;
+    CanvasObject.call(this, params);
+
+    if (params.numSliders == undefined) this.numSliders = 10;
+    else this.numSliders = params.numSliders;
+    
+    this.realVals = [];
+    for (var i = 0; i < this.numSliders; i++) {
+      this.realVals.push(Math.random());
+    }
+    this.g2d.fillStyle = '#666666';
+    this.notify = params.notify;
+    this.errMsg = 'slider field values need an array of length ';
+    this.errMsg += this.numSliders;
+  }
+
+  /*
+   *  Set one value in the slider field
+   */
+  SliderField.prototype.setVal = function (index, val) {
+    if (index < 0 || index >= this.numSliders) {
+      throw 'SliderField.setVal - indexOutOfBounds Exception';
+      return;
+    }
+    if (val < 0) val = 0;
+    else if (val > 1) val = 1;
+    this.realVals[index] = val;
+    this.notify(this.realVals);
+    this.requestRender();
+  }
+
+  /*
+   *  Set all values in the slider field
+   */
+  SliderField.prototype.setVals = function (vals) {
+    if (!(vals instanceof Array)) {
+      throw this.errMsg;
+      return;
+    }
+    else if (vals.length != this.numSliders) {
+      throw this.errMsg;
+      return;
+    }
+    for (var i = 0; i < this.numSliders; i++) {
+      var val = vals[i];
+      if (val < 0) val = 0;
+      else if (val > 1) val = 1;
+      this.realVals[i] = val;
+    }
+    this.notify(this.realVals);
+    this.requestRender();
+  }
+
+  /*
+   *  Get one value in the slider field
+   */
+  SliderField.prototype.getVal = function (index) {
+    if (index < 0 || index >= this.numSliders) {
+      throw 'SliderField.setVal - indexOutOfBounds Exception';
+      return;
+    }
+    return this.realVals[index];
+  }
+
+  /*
+   *  Get all values in the slider field - realVals array
+   */
+  SliderField.prototype.getVal = function () {
+    return this.realVals;
+  }
+
+
+  /******************************************
+   *  SliderFieldHoriz Extends SliderField  *
+   ******************************************/
+  SliderFieldHoriz.prototype = new SliderField();
+  SliderFieldHoriz.prototype.constructor = SliderFieldHoriz;
+  function SliderFieldHoriz (params) {
+    SliderField.call(this, params);
+    this.sliderHeight = Math.floor(this.height / this.numSliders);
+    this.render();
+  } 
+
+  // -Override
+  SliderFieldHoriz.prototype.processMouseTouch = function (action, x, y) {
+    if (action == 'touchend') return;
+    //get slider index
+    var index;
+    var vals = [];
+    for (var i = 0; i < this.numSliders; i++) {
+      var lowerBound = i * this.sliderHeight;
+      var upperBound = lowerBound + this.sliderHeight;
+      if (y >= lowerBound && y <= upperBound) {
+        index = i;
+        break;
+      }
+    }
+    if (index == undefined) return;
+    this.setVal(index, x / this.width);
+  }
+
+  // -Override
+  SliderFieldHoriz.prototype.render = function () {
+    this.g2d.clearRect(0, 0, this.width, this.height);
+    for (var i = 0; i < this.numSliders; i++) {
+      this.g2d.fillRect(0, i * this.sliderHeight + 2,
+        this.realVals[i] * this.width, this.sliderHeight - 2);
+    }
+    this.renderIsInQueue = false;
+  }
+
+
+
+  /*****************************************
+   *  SliderFieldVert Extends SliderField  *
+   *****************************************/
+  SliderFieldVert.prototype = new SliderField();
+  SliderFieldVert.prototype.constructor = SliderFieldVert;
+  function SliderFieldVert (params) {
+    SliderField.call(this, params);
+    this.sliderWidth = Math.floor(this.width / this.numSliders);
+    this.g2d.translate(0, this.height);
+    this.g2d.scale(1, -1);
+    this.render();
+  }
+
+  // -Override
+  SliderFieldVert.prototype.processMouseTouch = function (action, x, y) {
+    if (action == 'touchend') return;
+    //get slider index
+    var index;
+    for (var i = 0; i < this.numSliders; i++) {
+      var lowerBound = i * this.sliderWidth;
+      var upperBound = lowerBound + this.sliderWidth;
+      if (x >= lowerBound && x <= upperBound) {
+        index = i;
+        break;
+      }
+    }
+    if (index == undefined) return;
+    this.setVal(index, (this.height - y) / this.height);
+  }
+
+  // -Override
+  SliderFieldVert.prototype.render = function () {
+    this.g2d.clearRect(0, 0, this.width, this.height);
+    for (var i = 0; i < this.numSliders; i++) {
+      this.g2d.fillRect(i * this.sliderWidth + 2, 0,
+        this.sliderWidth - 2, this.realVals[i] * this.height);
+    }
+    this.renderIsInQueue = false;
+  }
+
+
   TouchLib.VertSlider = VertSlider;
   TouchLib.HorizSlider = HorizSlider;
   TouchLib.DiscreteVertSlider = DiscreteVertSlider;
@@ -1000,6 +1161,8 @@
   TouchLib.Slider2D = Slider2D;
   TouchLib.Joystick = Joystick;
   TouchLib.Knob = Knob;
+  TouchLib.SliderFieldHoriz = SliderFieldHoriz;
+  TouchLib.SliderFieldVert = SliderFieldVert;
   window.TouchLib = TouchLib;
 
 })(window);

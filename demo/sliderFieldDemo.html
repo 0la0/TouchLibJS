@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Slider Field Demo</title>
+  <style>
+  	body
+    {
+      font-family: helvetica, arial, sans-serif;
+      font-size: 1.3em;
+      color: #cccccc;
+      background: #dddddd;
+    }
+    .parent
+    {
+      touch-action: none;
+      -ms-touch-action: none;
+    }
+    .sliderField
+    {
+      background: #ffffff;
+      border: 2px solid #666666;
+      border-radius: 2px;
+      margin-left: 20px;
+      margin-top: 10px;
+    }
+  </style>
+  <script src="../touchLib.js"></script>
+</head>
+<body>
+  <div class="parent">
+    <div id="slidersH"></div>
+    <div id="slidersV"></div>
+  </div>
+
+  <script>
+  
+    var slidersH = new TouchLib.SliderFieldHoriz({
+      elementId: 'slidersH',
+      width: 200,
+      height: 200,
+      numSliders: 20,
+      cssClass: 'sliderField',
+      notify: function (valArr) {
+        console.log(valArr);
+      }
+    });
+
+    var slidersV = new TouchLib.SliderFieldVert({
+      elementId: 'slidersV',
+      width: 200,
+      height: 200,
+      numSliders: 4,
+      cssClass: 'sliderField',
+      notify: function (valArr) {
+        console.log(valArr);
+      }
+    });
+
+  </script>
+  
+</body>
+</html>

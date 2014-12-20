@@ -11,5 +11,8 @@ files+=" button/triggerButton.js"
 files+=" slider2d/slider2d.js"
 files+=" slider2d/joystick.js"
 files+=" knob/knob.js"
+files+=" sliderField/sliderField.js"
+files+=" sliderField/sliderFieldHorizontal.js"
+files+=" sliderField/sliderFieldVertical.js"
 files+=" meta/footer.js"
 cat $files > ../touchLib.js
