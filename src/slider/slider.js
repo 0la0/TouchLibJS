@@ -1,15 +1,3 @@
-  /****************************************************************
-   *
-   *  HTML5 UI SLIDER
-   *  IMPLEMENTED ON A CANVAS GRAPHICS CONTEXT
-   *  WORKS WITH BOTH MOUSE AND TOUCH
-   *
-   *  See demoDriver.html for implementation examples
-   *
-   *  Types: VertSlider, HorizSlider, 
-   *         DiscreteHorizSlider, DiscreteVertSlider
-   *
-   ***************************************************************/
 
   /**********************************
    *  Slider Extends Canvas Object  *
@@ -79,6 +67,7 @@
   }
 
   /**
+   *  -Override
    *  SETS THE CSS CLASS OF THE SLIDER ELEMENTS
    **/
   Slider.prototype.setClass = function (className) {
@@ -127,26 +116,3 @@
     }
   }
 
-  /**
-   *  COMMON CANVAS LISTENERS
-   **/
-  Slider.prototype.registerListeners = function (self) {
-    //-----------MOUSE LISTENERS----------------//
-    self.canvasEl.addEventListener('mouseup', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown) {
-        self.mouseIsDown = false;
-      }
-    }, false);
-    self.canvasEl.addEventListener('mouseout', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown) {
-        self.mouseIsDown = false;
-      }
-    }, false);
-    //-----------TOUCH LISTENERS----------------//
-    self.canvasEl.addEventListener('touchend', function (e) {
-      e.preventDefault();
-      self.mouseIsDown = false;
-    }, false);
-  }

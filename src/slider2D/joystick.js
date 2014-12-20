@@ -8,7 +8,6 @@
   function Joystick (params) {
     if (!params) return;
     Slider2D.call(this, params);
-    this.registerExtraListener(this);
     if (!params.crosshairStyle) this.crosshairStyle = '#333333'; 
     else this.crosshairStyle = params.crosshairStyle;
   }
@@ -24,16 +23,17 @@
     });
   }
 
-  /**
-   *  TOUCHEND CALLS ROUTINE TO ANIMATE BACK TO CENTER
-   **/
-  Joystick.prototype.registerExtraListener = function (self) {
-    self.canvasEl.addEventListener('touchend', function (e) {
-      if (e.touches.length == 0) {
-        self.isMigrating = true;
-        self.migrate();
-      }
-    }, false);
+  Joystick.prototype.processMouseTouch = function (action, x, y) {
+    if (action == 'mouseout' || 
+        action == 'mouseup'  ||
+        action == 'touchend'  )
+    {
+      this.isMigrating = true;
+      this.migrate();
+    }
+    else {
+      Slider2D.prototype.processMouseTouch.call(this, action, x, y);
+    }
   }
 
   /**

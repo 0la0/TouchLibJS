@@ -36,6 +36,7 @@
 
     this.mouseIsDown = false;
     this.renderIsInQueue = false;
+    this.registerListeners(this);
   }
 
   /**
@@ -69,6 +70,11 @@
 
   CanvasObject.prototype.render = function () {}
 
+  CanvasObject.prototype.processMouseTouch = function (action, x, y) {}
+
+  /**
+   *  SET THE CSS CLASS OF THE CANVAS DOM ELEMENT
+   **/
   CanvasObject.prototype.setClass = function (className) {
     if (!className) {
       console.log('error: no class given');
@@ -77,18 +83,75 @@
     this.canvasEl.className = className;
   }
 
-  /****************************************************************
-   *
-   *  HTML5 UI SLIDER
-   *  IMPLEMENTED ON A CANVAS GRAPHICS CONTEXT
-   *  WORKS WITH BOTH MOUSE AND TOUCH
-   *
-   *  See demoDriver.html for implementation examples
-   *
-   *  Types: VertSlider, HorizSlider, 
-   *         DiscreteHorizSlider, DiscreteVertSlider
-   *
-   ***************************************************************/
+  /**
+   *  REGISTER MOUSE AND TOUCH LISTENERS
+   *  common to all widgets that extend canvasObject
+   *  extending objects must override processMouseTouch()
+   **/
+  CanvasObject.prototype.registerListeners = function (self) {
+    self.canvasEl.addEventListener('mousedown', function (e) {
+      e.preventDefault();
+      self.mouseIsDown = true;
+      self.processMouseTouch(
+        'mousedown',
+        e.pageX - this.offsetLeft,
+        e.pageY - this.offsetTop
+      );
+    }, false);
+    self.canvasEl.addEventListener('mousemove', function (e) {
+      e.preventDefault();
+      if (self.mouseIsDown) {
+        self.processMouseTouch(
+          'mousedown',
+          e.pageX - this.offsetLeft,
+          e.pageY - this.offsetTop
+        );
+      }
+    }, false);
+    self.canvasEl.addEventListener('mouseout', function (e) {
+      e.preventDefault();
+      self.mouseIsDown = false;
+    }, false);
+    self.canvasEl.addEventListener('mouseup', function (e) {
+      e.preventDefault();
+      self.processMouseTouch(
+        'mouseup',
+        e.pageX - this.offsetLeft,
+        e.pageY - this.offsetTop
+      );
+      self.mouseIsDown = false;
+    }, false);
+
+    self.canvasEl.addEventListener('touchstart', function (e) {
+      e.preventDefault();
+      for (var i = 0; i < e.touches.length; i++) {
+        if (e.touches[i].target === this) {
+          self.processMouseTouch(
+            'touchstart',
+            e.touches[i].pageX - this.offsetLeft,
+            e.touches[i].pageY - this.offsetTop
+          );
+        }
+      }
+    }, false);
+    self.canvasEl.addEventListener('touchmove', function (e) {
+      e.preventDefault();
+      for (var i = 0; i < e.touches.length; i++) {
+        if (e.touches[i].target === this) {
+          self.processMouseTouch(
+            'touchmove',
+            e.touches[i].pageX - this.offsetLeft,
+            e.touches[i].pageY - this.offsetTop
+          );
+        }
+      }
+    }, false);
+    self.canvasEl.addEventListener('touchend', function (e) {
+      e.preventDefault();
+      self.processMouseTouch('touchend');
+    }, false);
+  }
+
 
   /**********************************
    *  Slider Extends Canvas Object  *
@@ -158,6 +221,7 @@
   }
 
   /**
+   *  -Override
    *  SETS THE CSS CLASS OF THE SLIDER ELEMENTS
    **/
   Slider.prototype.setClass = function (className) {
@@ -206,29 +270,6 @@
     }
   }
 
-  /**
-   *  COMMON CANVAS LISTENERS
-   **/
-  Slider.prototype.registerListeners = function (self) {
-    //-----------MOUSE LISTENERS----------------//
-    self.canvasEl.addEventListener('mouseup', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown) {
-        self.mouseIsDown = false;
-      }
-    }, false);
-    self.canvasEl.addEventListener('mouseout', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown) {
-        self.mouseIsDown = false;
-      }
-    }, false);
-    //-----------TOUCH LISTENERS----------------//
-    self.canvasEl.addEventListener('touchend', function (e) {
-      e.preventDefault();
-      self.mouseIsDown = false;
-    }, false);
-  }
 
   /************************************************
    *            VERTICAL SLIDER
@@ -238,7 +279,6 @@
   VertSlider.prototype.constructor = VertSlider;
   function VertSlider (params) {
     Slider.call(this, params);
-    this.registerListeners(this);
   } 
 
   /**
@@ -270,51 +310,11 @@
     this.renderIsInQueue = false;
   }
 
-
-  /**
-   *  VERTICAL SPECIFIC LISTENERS
-   **/
-  VertSlider.prototype.registerListeners = function (self) {
-    Slider.prototype.registerListeners.call(this, self);
-    //-----------MOUSE LISTENERS----------------//
-    self.canvasEl.addEventListener('mousedown', function (e) {
-      e.preventDefault();
-      self.mouseIsDown = true;
-      self.setVal(self.height - (e.pageY - self.canvasEl.offsetTop));
-    }, false);
-    self.canvasEl.addEventListener('mousemove', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown){
-        self.setVal(self.height - (e.pageY - self.canvasEl.offsetTop));
-      }
-    }, false);
-    //-----------TOUCH LISTENERS----------------//
-    self.canvasEl.addEventListener('touchstart', function (e) {
-      e.preventDefault();
-      for (var i = 0; i < e.touches.length; i++) {
-        if (e.touches[i].target === this) {
-          self.mouseIsDown = true;
-          self.setVal(
-            self.height - (e.touches[i].pageY - self.canvasEl.offsetTop)
-          );
-          break;
-        }
-      }
-    }, false);
-    self.canvasEl.addEventListener('touchmove', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown){
-        for (var i = 0; i < e.touches.length; i++) {
-          if (e.touches[i].target === this) {
-            self.setVal(
-              self.height - (e.touches[i].pageY - self.canvasEl.offsetTop)
-            );
-            break;
-          }
-        }
-      }
-    }, false);
+  VertSlider.prototype.processMouseTouch = function (action, x, y) {
+    if (action == 'touchend') return;
+    this.setVal(this.height - y);
   }
+
 
   /************************************************
    *            HORIZONTAL SLIDER
@@ -324,7 +324,6 @@
   HorizSlider.prototype.constructor = HorizSlider; 
   function HorizSlider (params) {
     Slider.call(this, params);
-    this.registerListeners(this);
   }
 
   /**
@@ -356,46 +355,11 @@
     this.renderIsInQueue = false;
   }
 
-  /**
-   *  HORIZONTAL SPECIFIC LISTENERS
-   **/
-  HorizSlider.prototype.registerListeners = function (self) {
-    Slider.prototype.registerListeners.call(this, self);
-    //-----------MOUSE LISTENERS----------------//
-    self.canvasEl.addEventListener('mousedown', function (e) {
-      e.preventDefault();
-      self.mouseIsDown = true;
-      self.setVal(e.pageX - self.canvasEl.offsetLeft);
-    }, false);
-    self.canvasEl.addEventListener('mousemove', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown){
-        self.setVal(e.pageX - self.canvasEl.offsetLeft);
-      }
-    }, false);
-    //-----------TOUCH LISTENERS----------------//
-    self.canvasEl.addEventListener('touchstart', function (e) {
-      e.preventDefault();
-      for (var i = 0; i < e.touches.length; i++) {
-        if (e.touches[i].target === this) {
-          self.mouseIsDown = true;
-          self.setVal(e.touches[i].pageX - self.canvasEl.offsetLeft);
-          break;
-        }
-      }
-    }, false);
-    self.canvasEl.addEventListener('touchmove', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown){
-        for (var i = 0; i < e.touches.length; i++) {
-          if (e.touches[i].target === this) {
-            self.setVal(e.touches[i].pageX - self.canvasEl.offsetLeft);
-            break;
-          }
-        }
-      }
-    }, false);
+  HorizSlider.prototype.processMouseTouch = function (action, x, y) {
+    if (action == 'touchend') return;
+    this.setVal(x);
   }
+
 
   /************************************************
    *           DISCRETE VERTICAL SLIDER
@@ -417,8 +381,7 @@
     this.binBorderColor = params.binBorderColor;
     
     Slider.call(this, params);
-    this.registerListeners(this);
-
+    
     var oldStyle = this.g2d.fillStyle;
     this.g2d.fillStyle = this.binBorderColor;
     for (var i = 0; i <= this.numBins; i++) {
@@ -477,47 +440,11 @@
     this.renderIsInQueue = false;
   }
 
-  /**
-   *  VERTICAL SPECIFIC LISTENERS
-   **/
-  DiscreteVertSlider.prototype.registerListeners = function (self) {
-    Slider.prototype.registerListeners.call(this, self);
-    //-----------MOUSE LISTENERS----------------//
-    self.canvasEl.addEventListener('mousedown', function (e) {
-      e.preventDefault();
-      self.mouseIsDown = true;
-      self.setVal(e.pageY - self.canvasEl.offsetTop);
-
-    }, false);
-    self.canvasEl.addEventListener('mousemove', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown){
-        self.setVal(e.pageY - self.canvasEl.offsetTop);
-      }
-    }, false);
-    //-----------TOUCH LISTENERS----------------//
-    self.canvasEl.addEventListener('touchstart', function (e) {
-      e.preventDefault();
-      for (var i = 0; i < e.touches.length; i++) {
-        if (e.touches[i].target === this) {
-          self.mouseIsDown = true;
-          self.setVal(e.touches[i].pageY - self.canvasEl.offsetTop);
-          break;
-        }
-      }
-    }, false);
-    self.canvasEl.addEventListener('touchmove', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown){
-        for (var i = 0; i < e.touches.length; i++) {
-          if (e.touches[i].target === this) {
-            self.setVal(e.touches[i].pageY - self.canvasEl.offsetTop);
-            break;
-          }
-        }
-      }
-    }, false);
+  DiscreteVertSlider.prototype.processMouseTouch = function (action, x, y) {
+    if (action == 'touchend') return;
+    this.setVal(y);
   }
+
 
   /************************************************
    *         DISCRETE HORIZONTAL SLIDER
@@ -539,8 +466,7 @@
     this.binBorderColor = params.binBorderColor;
     
     Slider.call(this, params);
-    this.registerListeners(this);
-
+    
     var oldStyle = this.g2d.fillStyle;
     this.g2d.fillStyle = this.binBorderColor;
     for (var i = 0; i <= this.numBins; i++) {
@@ -599,46 +525,11 @@
     this.renderIsInQueue = false;
   }
 
-  /**
-   *  HORIZONTAL SPECIFIC LISTENERS
-   **/
-  DiscreteHorizSlider.prototype.registerListeners = function (self) {
-    Slider.prototype.registerListeners.call(this, self);
-    //-----------MOUSE LISTENERS----------------//
-    self.canvasEl.addEventListener('mousedown', function (e) {
-      e.preventDefault();
-      self.mouseIsDown = true;
-      self.setVal(e.pageX - self.canvasEl.offsetLeft);
-    }, false);
-    self.canvasEl.addEventListener('mousemove', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown){
-        self.setVal(e.pageX - self.canvasEl.offsetLeft);
-      }
-    }, false);
-    //-----------TOUCH LISTENERS----------------//
-    self.canvasEl.addEventListener('touchstart', function (e) {
-      e.preventDefault();
-      for (var i = 0; i < e.touches.length; i++) {
-        if (e.touches[i].target === this) {
-          self.mouseIsDown = true;
-          self.setVal(e.touches[i].pageX - self.canvasEl.offsetLeft);
-          break;
-        }
-      }
-    }, false);
-    self.canvasEl.addEventListener('touchmove', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown){
-        for (var i = 0; i < e.touches.length; i++) {
-          if (e.touches[i].target === this) {
-            self.setVal(e.touches[i].pageX - self.canvasEl.offsetLeft);
-            break;
-          }
-        }
-      }
-    }, false);
+  DiscreteHorizSlider.prototype.processMouseTouch = function (action, x, y) {
+    if (action == 'touchend') return;
+    this.setVal(x);
   }
+
 
 
   /****************************************************************
@@ -863,69 +754,14 @@
     }
     this.cvsPos.radius2 = this.cvsPos.radius * 2;
     this.twoPi = 2 * Math.PI;
-    this.registerListeners(this);
     this.setNormalPosition(0.5, 0.5);
-  }
-
-  /**
-   *  SLIDER2D LISTENERS
-   **/
-  Slider2D.prototype.registerListeners = function (self) {
-    self.canvasEl.addEventListener('mousedown', function (e) {
-      e.preventDefault();
-      self.isMigrating = false;
-      self.mouseIsDown = true;
-      self.processMouseTouch(
-        e.pageX - this.offsetLeft,
-        e.pageY - this.offsetTop
-      );
-    }, false);
-    self.canvasEl.addEventListener('mousemove', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown){
-        self.processMouseTouch(
-          e.pageX - this.offsetLeft,
-          e.pageY - this.offsetTop
-        );
-      }
-    }, false);
-    self.canvasEl.addEventListener('mouseup', function (e) {
-      e.preventDefault();
-      self.mouseIsDown = false;
-      if (self instanceof Joystick) {
-        self.isMigrating = true;
-        self.migrate();
-      }
-    }, false);
-    
-    self.canvasEl.addEventListener('touchstart', function (e) {
-      e.preventDefault();
-      for (var i = 0; i < e.touches.length; i++) {
-        if (e.touches[i].target === this) {
-          self.processMouseTouch(
-            e.touches[i].pageX - this.offsetLeft,
-            e.touches[i].pageY - this.offsetTop
-          );
-        }
-      }
-    }, false);
-    self.canvasEl.addEventListener('touchmove', function (e) {
-      e.preventDefault();
-      for (var i = 0; i < e.touches.length; i++) {
-        if (e.touches[i].target === this) {
-          self.processMouseTouch(
-            e.touches[i].pageX - this.offsetLeft,
-            e.touches[i].pageY - this.offsetTop
-          );
-        }
-      }
-    }, false);
   }
 
   /**
    *  PROCESS MOUSE OR TOUCH COORDINATE DATA
    **/
-  Slider2D.prototype.processMouseTouch = function (x, y) {
+  Slider2D.prototype.processMouseTouch = function (action, x, y) {
+    if (action == 'touchend') return;
     if (x < 0) x = 0;
     else if (x >= this.width) {
       x = this.width - 1;
@@ -975,7 +811,7 @@
    *  SET VALUE [0 - 1]
    **/
   Slider2D.prototype.setNormalPosition = function (x, y) {
-    this.processMouseTouch(x * this.width, this.height - y * this.height);
+    this.processMouseTouch('', x * this.width, this.height - y * this.height);
   }
 
   /**
@@ -1002,7 +838,6 @@
   function Joystick (params) {
     if (!params) return;
     Slider2D.call(this, params);
-    this.registerExtraListener(this);
     if (!params.crosshairStyle) this.crosshairStyle = '#333333'; 
     else this.crosshairStyle = params.crosshairStyle;
   }
@@ -1018,16 +853,17 @@
     });
   }
 
-  /**
-   *  TOUCHEND CALLS ROUTINE TO ANIMATE BACK TO CENTER
-   **/
-  Joystick.prototype.registerExtraListener = function (self) {
-    self.canvasEl.addEventListener('touchend', function (e) {
-      if (e.touches.length == 0) {
-        self.isMigrating = true;
-        self.migrate();
-      }
-    }, false);
+  Joystick.prototype.processMouseTouch = function (action, x, y) {
+    if (action == 'mouseout' || 
+        action == 'mouseup'  ||
+        action == 'touchend'  )
+    {
+      this.isMigrating = true;
+      this.migrate();
+    }
+    else {
+      Slider2D.prototype.processMouseTouch.call(this, action, x, y);
+    }
   }
 
   /**
@@ -1102,7 +938,6 @@
     this.range = 1.5 * Math.PI;
     this.fillstyle = params.fillstyle;
     this.setSize(params.width, params.height);
-    this.registerListeners(this);
     this.render();
   }
 
@@ -1124,56 +959,8 @@
     this.renderIsInQueue = false;
   }
 
-  Knob.prototype.registerListeners = function (self) {
-    
-    self.canvasEl.addEventListener('mousedown', function (e) {
-      e.preventDefault();
-      self.mouseIsDown = true;
-      self.processTouch(
-        e.pageX - this.offsetLeft,
-        e.pageY - this.offsetTop
-      );
-    }, false);
-    self.canvasEl.addEventListener('mousemove', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown) {
-        self.processTouch(
-          e.pageX - this.offsetLeft,
-          e.pageY - this.offsetTop
-        );
-      }
-    }, false);
-    self.canvasEl.addEventListener('mouseup', function (e) {
-      e.preventDefault();
-      self.mouseIsDown = false;
-    }, false);
-
-    self.canvasEl.addEventListener('touchstart', function (e) {
-      e.preventDefault();
-      for (var i = 0; i < e.touches.length; i++) {
-        if (e.touches[i].target === this) {
-          self.processTouch(
-            e.touches[i].pageX - this.offsetLeft,
-            e.touches[i].pageY - this.offsetTop
-          );
-        }
-      }
-    }, false);
-    self.canvasEl.addEventListener('touchmove', function (e) {
-      e.preventDefault();
-      for (var i = 0; i < e.touches.length; i++) {
-        if (e.touches[i].target === this) {
-          self.processTouch(
-            e.touches[i].pageX - this.offsetLeft,
-            e.touches[i].pageY - this.offsetTop
-          );
-        }
-      }
-    }, false);
-
-  }
-
-  Knob.prototype.processTouch = function (x, y) {
+  Knob.prototype.processMouseTouch = function (action, x, y) {
+    if (action == 'touchend') return;
     x = x - this.halfWidth;
     y = y - this.halfHeight;
     var realValue;

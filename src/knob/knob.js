@@ -27,7 +27,6 @@
     this.range = 1.5 * Math.PI;
     this.fillstyle = params.fillstyle;
     this.setSize(params.width, params.height);
-    this.registerListeners(this);
     this.render();
   }
 
@@ -49,56 +48,8 @@
     this.renderIsInQueue = false;
   }
 
-  Knob.prototype.registerListeners = function (self) {
-    
-    self.canvasEl.addEventListener('mousedown', function (e) {
-      e.preventDefault();
-      self.mouseIsDown = true;
-      self.processTouch(
-        e.pageX - this.offsetLeft,
-        e.pageY - this.offsetTop
-      );
-    }, false);
-    self.canvasEl.addEventListener('mousemove', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown) {
-        self.processTouch(
-          e.pageX - this.offsetLeft,
-          e.pageY - this.offsetTop
-        );
-      }
-    }, false);
-    self.canvasEl.addEventListener('mouseup', function (e) {
-      e.preventDefault();
-      self.mouseIsDown = false;
-    }, false);
-
-    self.canvasEl.addEventListener('touchstart', function (e) {
-      e.preventDefault();
-      for (var i = 0; i < e.touches.length; i++) {
-        if (e.touches[i].target === this) {
-          self.processTouch(
-            e.touches[i].pageX - this.offsetLeft,
-            e.touches[i].pageY - this.offsetTop
-          );
-        }
-      }
-    }, false);
-    self.canvasEl.addEventListener('touchmove', function (e) {
-      e.preventDefault();
-      for (var i = 0; i < e.touches.length; i++) {
-        if (e.touches[i].target === this) {
-          self.processTouch(
-            e.touches[i].pageX - this.offsetLeft,
-            e.touches[i].pageY - this.offsetTop
-          );
-        }
-      }
-    }, false);
-
-  }
-
-  Knob.prototype.processTouch = function (x, y) {
+  Knob.prototype.processMouseTouch = function (action, x, y) {
+    if (action == 'touchend') return;
     x = x - this.halfWidth;
     y = y - this.halfHeight;
     var realValue;

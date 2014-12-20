@@ -7,7 +7,6 @@
   VertSlider.prototype.constructor = VertSlider;
   function VertSlider (params) {
     Slider.call(this, params);
-    this.registerListeners(this);
   } 
 
   /**
@@ -39,48 +38,8 @@
     this.renderIsInQueue = false;
   }
 
-
-  /**
-   *  VERTICAL SPECIFIC LISTENERS
-   **/
-  VertSlider.prototype.registerListeners = function (self) {
-    Slider.prototype.registerListeners.call(this, self);
-    //-----------MOUSE LISTENERS----------------//
-    self.canvasEl.addEventListener('mousedown', function (e) {
-      e.preventDefault();
-      self.mouseIsDown = true;
-      self.setVal(self.height - (e.pageY - self.canvasEl.offsetTop));
-    }, false);
-    self.canvasEl.addEventListener('mousemove', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown){
-        self.setVal(self.height - (e.pageY - self.canvasEl.offsetTop));
-      }
-    }, false);
-    //-----------TOUCH LISTENERS----------------//
-    self.canvasEl.addEventListener('touchstart', function (e) {
-      e.preventDefault();
-      for (var i = 0; i < e.touches.length; i++) {
-        if (e.touches[i].target === this) {
-          self.mouseIsDown = true;
-          self.setVal(
-            self.height - (e.touches[i].pageY - self.canvasEl.offsetTop)
-          );
-          break;
-        }
-      }
-    }, false);
-    self.canvasEl.addEventListener('touchmove', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown){
-        for (var i = 0; i < e.touches.length; i++) {
-          if (e.touches[i].target === this) {
-            self.setVal(
-              self.height - (e.touches[i].pageY - self.canvasEl.offsetTop)
-            );
-            break;
-          }
-        }
-      }
-    }, false);
+  VertSlider.prototype.processMouseTouch = function (action, x, y) {
+    if (action == 'touchend') return;
+    this.setVal(this.height - y);
   }
+

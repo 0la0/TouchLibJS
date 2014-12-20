@@ -32,6 +32,7 @@
 
     this.mouseIsDown = false;
     this.renderIsInQueue = false;
+    this.registerListeners(this);
   }
 
   /**
@@ -65,11 +66,85 @@
 
   CanvasObject.prototype.render = function () {}
 
+  CanvasObject.prototype.processMouseTouch = function (action, x, y) {}
+
+  /**
+   *  SET THE CSS CLASS OF THE CANVAS DOM ELEMENT
+   **/
   CanvasObject.prototype.setClass = function (className) {
     if (!className) {
       console.log('error: no class given');
       return; 
     }
     this.canvasEl.className = className;
+  }
+
+  /**
+   *  REGISTER MOUSE AND TOUCH LISTENERS
+   *  common to all widgets that extend canvasObject
+   *  extending objects must override processMouseTouch()
+   **/
+  CanvasObject.prototype.registerListeners = function (self) {
+    self.canvasEl.addEventListener('mousedown', function (e) {
+      e.preventDefault();
+      self.mouseIsDown = true;
+      self.processMouseTouch(
+        'mousedown',
+        e.pageX - this.offsetLeft,
+        e.pageY - this.offsetTop
+      );
+    }, false);
+    self.canvasEl.addEventListener('mousemove', function (e) {
+      e.preventDefault();
+      if (self.mouseIsDown) {
+        self.processMouseTouch(
+          'mousedown',
+          e.pageX - this.offsetLeft,
+          e.pageY - this.offsetTop
+        );
+      }
+    }, false);
+    self.canvasEl.addEventListener('mouseout', function (e) {
+      e.preventDefault();
+      self.mouseIsDown = false;
+    }, false);
+    self.canvasEl.addEventListener('mouseup', function (e) {
+      e.preventDefault();
+      self.processMouseTouch(
+        'mouseup',
+        e.pageX - this.offsetLeft,
+        e.pageY - this.offsetTop
+      );
+      self.mouseIsDown = false;
+    }, false);
+
+    self.canvasEl.addEventListener('touchstart', function (e) {
+      e.preventDefault();
+      for (var i = 0; i < e.touches.length; i++) {
+        if (e.touches[i].target === this) {
+          self.processMouseTouch(
+            'touchstart',
+            e.touches[i].pageX - this.offsetLeft,
+            e.touches[i].pageY - this.offsetTop
+          );
+        }
+      }
+    }, false);
+    self.canvasEl.addEventListener('touchmove', function (e) {
+      e.preventDefault();
+      for (var i = 0; i < e.touches.length; i++) {
+        if (e.touches[i].target === this) {
+          self.processMouseTouch(
+            'touchmove',
+            e.touches[i].pageX - this.offsetLeft,
+            e.touches[i].pageY - this.offsetTop
+          );
+        }
+      }
+    }, false);
+    self.canvasEl.addEventListener('touchend', function (e) {
+      e.preventDefault();
+      self.processMouseTouch('touchend');
+    }, false);
   }
 

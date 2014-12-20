@@ -7,7 +7,6 @@
   HorizSlider.prototype.constructor = HorizSlider; 
   function HorizSlider (params) {
     Slider.call(this, params);
-    this.registerListeners(this);
   }
 
   /**
@@ -39,43 +38,8 @@
     this.renderIsInQueue = false;
   }
 
-  /**
-   *  HORIZONTAL SPECIFIC LISTENERS
-   **/
-  HorizSlider.prototype.registerListeners = function (self) {
-    Slider.prototype.registerListeners.call(this, self);
-    //-----------MOUSE LISTENERS----------------//
-    self.canvasEl.addEventListener('mousedown', function (e) {
-      e.preventDefault();
-      self.mouseIsDown = true;
-      self.setVal(e.pageX - self.canvasEl.offsetLeft);
-    }, false);
-    self.canvasEl.addEventListener('mousemove', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown){
-        self.setVal(e.pageX - self.canvasEl.offsetLeft);
-      }
-    }, false);
-    //-----------TOUCH LISTENERS----------------//
-    self.canvasEl.addEventListener('touchstart', function (e) {
-      e.preventDefault();
-      for (var i = 0; i < e.touches.length; i++) {
-        if (e.touches[i].target === this) {
-          self.mouseIsDown = true;
-          self.setVal(e.touches[i].pageX - self.canvasEl.offsetLeft);
-          break;
-        }
-      }
-    }, false);
-    self.canvasEl.addEventListener('touchmove', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown){
-        for (var i = 0; i < e.touches.length; i++) {
-          if (e.touches[i].target === this) {
-            self.setVal(e.touches[i].pageX - self.canvasEl.offsetLeft);
-            break;
-          }
-        }
-      }
-    }, false);
+  HorizSlider.prototype.processMouseTouch = function (action, x, y) {
+    if (action == 'touchend') return;
+    this.setVal(x);
   }
+

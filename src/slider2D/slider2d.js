@@ -32,69 +32,14 @@
     }
     this.cvsPos.radius2 = this.cvsPos.radius * 2;
     this.twoPi = 2 * Math.PI;
-    this.registerListeners(this);
     this.setNormalPosition(0.5, 0.5);
-  }
-
-  /**
-   *  SLIDER2D LISTENERS
-   **/
-  Slider2D.prototype.registerListeners = function (self) {
-    self.canvasEl.addEventListener('mousedown', function (e) {
-      e.preventDefault();
-      self.isMigrating = false;
-      self.mouseIsDown = true;
-      self.processMouseTouch(
-        e.pageX - this.offsetLeft,
-        e.pageY - this.offsetTop
-      );
-    }, false);
-    self.canvasEl.addEventListener('mousemove', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown){
-        self.processMouseTouch(
-          e.pageX - this.offsetLeft,
-          e.pageY - this.offsetTop
-        );
-      }
-    }, false);
-    self.canvasEl.addEventListener('mouseup', function (e) {
-      e.preventDefault();
-      self.mouseIsDown = false;
-      if (self instanceof Joystick) {
-        self.isMigrating = true;
-        self.migrate();
-      }
-    }, false);
-    
-    self.canvasEl.addEventListener('touchstart', function (e) {
-      e.preventDefault();
-      for (var i = 0; i < e.touches.length; i++) {
-        if (e.touches[i].target === this) {
-          self.processMouseTouch(
-            e.touches[i].pageX - this.offsetLeft,
-            e.touches[i].pageY - this.offsetTop
-          );
-        }
-      }
-    }, false);
-    self.canvasEl.addEventListener('touchmove', function (e) {
-      e.preventDefault();
-      for (var i = 0; i < e.touches.length; i++) {
-        if (e.touches[i].target === this) {
-          self.processMouseTouch(
-            e.touches[i].pageX - this.offsetLeft,
-            e.touches[i].pageY - this.offsetTop
-          );
-        }
-      }
-    }, false);
   }
 
   /**
    *  PROCESS MOUSE OR TOUCH COORDINATE DATA
    **/
-  Slider2D.prototype.processMouseTouch = function (x, y) {
+  Slider2D.prototype.processMouseTouch = function (action, x, y) {
+    if (action == 'touchend') return;
     if (x < 0) x = 0;
     else if (x >= this.width) {
       x = this.width - 1;
@@ -144,7 +89,7 @@
    *  SET VALUE [0 - 1]
    **/
   Slider2D.prototype.setNormalPosition = function (x, y) {
-    this.processMouseTouch(x * this.width, this.height - y * this.height);
+    this.processMouseTouch('', x * this.width, this.height - y * this.height);
   }
 
   /**
