@@ -1,8 +1,7 @@
-TouchLibJS
-=================
+<h1>TouchLibJS<h1>
 
-UI library for touch and mouse.
+<p>UI toolkit for mouse and touch.</p>
 
-Includes sliders and buttons.
+<h3>Dependencies</h3>
 
-Check demoDriver.html for implementation examples.
+<p>HTML5 browser</p>
