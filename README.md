@@ -8,8 +8,11 @@ HTML5 browser
 
 ###Vertical Slider
 TouchLib.VertSlider
+
 ![alt tag](readmeImages/verticalSlider.jpg)
+
 Instantiation:
+```javascript
 var vertSlider = TouchLib.VertSlider({
   //DOM element the slider will be created in (required)
   elementId: 'vSliderDOMelement',
@@ -38,11 +41,13 @@ var vertSlider = TouchLib.VertSlider({
     console.log('vertSlider1 val:', val);
   }
 });
-
+```
 VertSlider Methods:
-vertSlider.getVal() returns the normalized value \[0 - 1\]
-vertSlider.setValue(Number) accepts a normalized value \[0 - 1\]
-vertSlider.setClass(String) sets the css class of the slider elements
+```javascript
+vertSlider.getVal(); //returns the normalized value \[0 - 1\]
+vertSlider.setValue(Number); //accepts a normalized value \[0 - 1\]
+vertSlider.setClass(String); //sets the css class of the slider elements
+```
 [Usage example](demo/verticalSliderDemo.html)
 
 ###Horizontal Slider
