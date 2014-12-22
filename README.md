@@ -13,7 +13,7 @@ ___
 
 Instantiation:
 ```javascript
-var vertSlider = TouchLib.VertSlider({
+var vertSlider = new TouchLib.VertSlider({
   //DOM element in which the slider will be created (required)
   elementId: 'vSliderDOMelement',
   //Text label for the slider (optional)
@@ -48,7 +48,7 @@ vertSlider.getVal(); //returns the normalized value [0 - 1]
 vertSlider.setValue(Number); //accepts a normalized value [0 - 1]
 vertSlider.setClass(String); //sets the css class of the slider elements
 ```
-[Usage example](demo/verticalSliderDemo.html)
+[Vertical Slider Usage example](demo/verticalSliderDemo.html)
 ___
 
 ###Horizontal Slider (TouchLib.HorizSlider)
@@ -94,18 +94,92 @@ horizSlider.getVal(); //returns the normalized value [0 - 1]
 horizSlider.setValue(Number); //accepts a normalized value [0 - 1]
 horizSlider.setClass(String); //sets the css class of the slider elements
 ```
-[Usage example](demo/horizontalSliderDemo.html)
+[Horizontal Slider Usage example](demo/horizontalSliderDemo.html)
 ___
-###Discrete Vertical Slider
+###Discrete Vertical Slider (TouchLib.DiscreteVertSlider)
+
 ![alt tag](readmeImages/verticalDiscreteSlider.jpg)
-[Usage example](demo/discreteVerticalSliderDemo.html)
 
+The constructor JSON parameter is very similar to TouchLib.VertSlider.  Therefore only unique parameters are commented here.
+Instantiation:
+```javascript
+var dvSlider = new TouchLib.DiscreteVertSlider({
+  elementId: 'parentElementID',
+  label: 'Label',
+  fillstyle: '#3366dd',
+  width: 40,
+  height: 200,
+  //CSS formated color for the lines between bins
+  binBorderColor: '#2222cc',
+  //the number of bins the discrete slider will have
+  numBins: 6,
+  //note outputIsOverriden has a truthy value,
+  //and is directly related to the innerHTML
+  //statement in the notification function
+  outputIsOverridden: true,
+  initVal: 0,
+  sliderCss: {
+    background: '#444477',
+    border: '2px solid #0033cc',
+    borderRadius: '4px',
+  },
+  //returns the bin index
+  //gets called when the bin index changes
+  notify: function (val) {
+    this.outputEl.innerHTML = val;
+    console.log('dvSlider1 val: ', val);
+  }
+});
+```
+DiscreteVertSlider Methods:
+```javascript
+dvSlider.getVal() //return the active bin index
+dvSlider.setBin() //set the active bin index
+dvSlider.setClass(String); //sets the css class of the slider elements
+```
+[Discrete Vertical Slider Usage example](demo/discreteVerticalSliderDemo.html)
 ___
 
-###Discrete Horizontal Slider
-![alt tag](readmeImages/horizontalDiscreteSlider.jpg)
-[Usage example](demo/discreteHorizontalSliderDemo.html)
+###Discrete Horizontal Slider (TouchLib.DiscreteHorizSlider)
 
+![alt tag](readmeImages/horizontalDiscreteSlider.jpg)
+
+The constructor JSON parameter is very similar to TouchLib.VertSlider.  Therefore only unique parameters are commented here.
+Instantiation:
+```javascript
+var dhSlider = new TouchLib.DiscreteHorizSlider({
+  elementId: 'parentElementID',
+  label: 'Label',
+  fillstyle: '#3366dd',
+  width: 200,
+  height: 40,
+  //CSS formated color for the lines between bins
+  binBorderColor: '#2222cc',
+  //the number of bins the discrete slider will have
+  numBins: 6,
+  outputIsOverridden: true,
+  initVal: 0,
+  cssClass: 'horizSliderClass',
+  sliderCss: {
+    background: '#444477',
+    border: '2px solid #0033cc',
+    borderRadius: '4px',
+  },
+  //returns the bin index
+  //gets called when the bin index changes
+  notify: function (val) {
+    this.outputEl.innerHTML = val;
+    console.log('hvSlider1 val: ', val);
+  }
+});
+```
+DiscreteHorizSlider Methods:
+```javascript
+dhSlider.getVal() //return the active bin index
+dhSlider.setBin() //set the active bin index
+dhSlider.setClass(String); //sets the css class of the slider elements
+```
+[Discrete Horizontal Slider Usage example](demo/discreteHorizontalSliderDemo.html)
 ___
 
 ###Slider2D

@@ -413,7 +413,21 @@
     if (this.currentBin != this.lastBin) {
       Slider.prototype.setVal.call(this, val);
     }
-    
+  }
+
+  /**
+   *  SET THE ACTIVE BIN INDEX
+   **/
+  DiscreteVertSlider.prototype.setBin = function (index) {
+    if (index < 0 || index >= this.numBins) {
+      throw 'indexOutOfBounds Exception';
+      return;
+    }
+    this.currentBin = index;
+    if (this.currentBin != this.lastBin) {
+      var realVal = this.currentBin * this.height;
+      Slider.prototype.setVal.call(this, realVal);
+    }
   }
 
   /**
@@ -498,7 +512,21 @@
     if (this.currentBin != this.lastBin) {
       Slider.prototype.setVal.call(this, val);
     }
-    
+  }
+
+  /**
+   *  SET THE ACTIVE BIN INDEX
+   **/
+  DiscreteHorizSlider.prototype.setBin = function (index) {
+    if (index < 0 || index >= this.numBins) {
+      throw 'indexOutOfBounds Exception';
+      return;
+    }
+    this.currentBin = index;
+    if (this.currentBin != this.lastBin) {
+      var realVal = this.currentBin * this.width;
+      Slider.prototype.setVal.call(this, realVal);
+    }
   }
 
   /**
