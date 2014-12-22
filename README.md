@@ -207,7 +207,7 @@ var slider2d = new TouchLib.Slider2D({
 Slider2D Methods:
 ```javascript
 slider2d.getNormalVal() //returns JSON object of normalized values [0 - 1]
-slider2d..setNormalPosition(Number x, Number y) //takes normalized values [0 - 1]
+slider2d.setNormalPosition(Number x, Number y) //takes normalized values [0 - 1]
 slider2d.setClass(String); //sets the css class of the slider elements
 ```
 [Slider2D Usage Example](demo/slider2dDemo.html)
@@ -326,7 +326,9 @@ hsField.setVals(Array vals); //takes an array of normalized values [0 - 1]
 hsField.setClass(String); //sets the css class of the slider elements
 ```
 [Horizontal Slider Field Usage Example](demo/sliderFieldDemo.html)
-___###Toggle Button (TouchLib.ToggleButton)
+___
+
+###Toggle Button (TouchLib.ToggleButton)
 
 ![alt tag](readmeImages/toggleButton.jpg)
 
