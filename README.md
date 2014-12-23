@@ -262,7 +262,8 @@ var knob = new TouchLib.Knob({
 ```
 Knob Methods:
 ```javascript
-//(still needs normalized value getter and setter)
+knob.getVal(); //returns the normalized value [0 - 1]
+knob.setVal(Number); //takes a normalized value [0 - 1]
 knob.setClass(String); //sets the css class of the slider elements
 ```
 [Knob Usage Example](demo/knobDemo.html)

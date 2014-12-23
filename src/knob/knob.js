@@ -20,6 +20,7 @@
     if (!params.fillStyle) this.fillStyle = '#333333';
     else this.fillStyle = params.fillStyle;
 
+    this.realVal;
     this.theta = 0;
     this.notify = params.notify;
     this.minAngle = 0.75 * Math.PI;
@@ -54,28 +55,41 @@
     y = y - this.halfHeight;
     var realValue;
     var theta = Math.atan(y / x);
-    if (y > 0 && x < 0) {
+    if (x < 0) {
       theta += Math.PI;
       realValue = theta - this.minAngle;
     }
-    else if (y <= 0 && x < 0) {
-      theta += Math.PI;
-      realValue = theta - this.minAngle;
+    else {
+      if (y < 0) {
+        theta += 2 * Math.PI;
+        realValue = theta - this.minAngle;
+      }
+      else {
+        realValue = theta - this.minAngle + 2 * Math.PI;
+      }
     }
-    else if (y < 0 && x > 0) {
-      theta += 2 * Math.PI;
-      realValue = theta - this.minAngle;
-    }
-    else if (y >= 0 && x >= 0) {
-      realValue = theta - this.minAngle + 2 * Math.PI;
-    }
-
-    if (theta > this.maxAngle && theta < this.minAngle) {
-      return;
-    }
+    if (theta > this.maxAngle && theta < this.minAngle) return;
     realValue /= this.range;
+    this.realVal = realValue;
     this.notify(realValue);
     this.theta = theta;
+    this.requestRender();
+  }
+
+  Knob.prototype.getVal = function () {
+    return this.realVal;
+  }
+
+  Knob.prototype.setVal = function (val) {
+    if (val < 0 || val > 1) {
+      throw 'valueOutOfBounds Exception, takes [0 - 1]';
+      return;
+    }
+    this.realVal = val;
+    //calculate theta
+    var t = val * this.range;
+    this.theta = t + this.minAngle;
+    this.notify(val);
     this.requestRender();
   }
 
