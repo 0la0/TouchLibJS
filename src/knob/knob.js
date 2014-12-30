@@ -31,6 +31,9 @@
     this.render();
   }
 
+  /**
+   *  @Override
+   **/
   Knob.prototype.render = function () {
     //outer ring
     this.g2d.strokeStyle = this.outline;
@@ -49,6 +52,9 @@
     this.renderIsInQueue = false;
   }
 
+  /**
+   *  @Override
+   **/
   Knob.prototype.processMouseTouch = function (action, x, y) {
     if (action == 'touchend') return;
     x = x - this.halfWidth;
@@ -76,10 +82,16 @@
     this.requestRender();
   }
 
+  /**
+   *  RETURNS THE NORMALIZED VALUE [0 - 1]
+   **/
   Knob.prototype.getVal = function () {
     return this.realVal;
   }
 
+  /**
+   *  SETS THE NORMALIZED VALUE [0 - 1]
+   **/
   Knob.prototype.setVal = function (val) {
     if (val < 0 || val > 1) {
       throw 'valueOutOfBounds Exception, takes [0 - 1]';

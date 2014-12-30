@@ -10,7 +10,9 @@
     this.render();
   } 
 
-  // -Override
+  /**
+   *  @Override
+   **/
   SliderFieldHoriz.prototype.processMouseTouch = function (action, x, y) {
     if (action == 'touchend') return;
     //get slider index
@@ -28,7 +30,9 @@
     this.setVal(index, x / this.width);
   }
 
-  // -Override
+  /**
+   *  @Override
+   **/
   SliderFieldHoriz.prototype.render = function () {
     this.g2d.clearRect(0, 0, this.width, this.height);
     for (var i = 0; i < this.numSliders; i++) {

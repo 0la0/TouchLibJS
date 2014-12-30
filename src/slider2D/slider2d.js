@@ -36,6 +36,7 @@
   }
 
   /**
+   *  @Override
    *  PROCESS MOUSE OR TOUCH COORDINATE DATA
    **/
   Slider2D.prototype.processMouseTouch = function (action, x, y) {
@@ -54,6 +55,9 @@
     this.requestRender();
   }
 
+  /**
+   *  @Override
+   **/
   Slider2D.prototype.render = function () {
     //clear last pos
     this.g2d.clearRect(
@@ -76,7 +80,7 @@
   }
 
   /**
-   *  SET VALUE [0 - WIDTH and HEIGHT]
+   *  SET VALUE ([0 - WIDTH], [0 - HEIGHT])
    **/
   Slider2D.prototype.setRealPosition = function (x, y) {
     this.normalVal.x = x / this.width;
@@ -86,21 +90,21 @@
   }
 
   /**
-   *  SET VALUE [0 - 1]
+   *  SET NORMALIZED VALUE ([0 - 1], [0 - 1])
    **/
   Slider2D.prototype.setNormalPosition = function (x, y) {
     this.processMouseTouch('', x * this.width, this.height - y * this.height);
   }
 
   /**
-   *  RETURN SLIDER POSITION VALUE [0 - WIDTH and HEIGHT]
+   *  RETURN SLIDER POSITION VALUE [0 - WIDTH], [0 - HEIGHT]
    **/
   Slider2D.prototype.getRealVal = function () {
     return {x: this.cvsPos.thisX, y: this.cvsPos.thisY};
   }
 
   /**
-   *  RETURN NORMALIZED VALUE [0 - 1]
+   *  RETURN NORMALIZED VALUE [0 - 1], [0 - 1]
    **/
   Slider2D.prototype.getNormalVal = function () {
     return this.normalVal;

@@ -64,8 +64,14 @@
     }
   }
 
+  /**
+   *  SUBCLASS MUST IMPLEMENT RENDER FUNCITON
+   **/
   CanvasObject.prototype.render = function () {}
 
+  /**
+   *  SUBCLASS MUST IMPLEMENT PROCESS MOUSE TOUCH
+   **/
   CanvasObject.prototype.processMouseTouch = function (action, x, y) {}
 
   /**
@@ -82,7 +88,7 @@
   /**
    *  REGISTER MOUSE AND TOUCH LISTENERS
    *  common to all widgets that extend canvasObject
-   *  extending objects must override processMouseTouch()
+   *  mouse or touch locations are sent to processMouseTouch()
    **/
   CanvasObject.prototype.registerListeners = function (self) {
     self.canvasEl.addEventListener('mousedown', function (e) {

@@ -1,7 +1,7 @@
 
-  /************************************************
-   *            HORIZONTAL SLIDER
-   *            EXTENDS    SLIDER
+  /***********************************************
+   *            HORIZONTAL SLIDER                *
+   *            EXTENDS    SLIDER                *
    ***********************************************/
   HorizSlider.prototype = new Slider();
   HorizSlider.prototype.constructor = HorizSlider; 
@@ -28,6 +28,7 @@
   }
 
   /**
+   *  @Override
    *  HORIZONTAL SPECIFIC RENDER
    **/
   HorizSlider.prototype.render = function () {
@@ -38,6 +39,9 @@
     this.renderIsInQueue = false;
   }
 
+  /**
+   *  @Override
+   **/
   HorizSlider.prototype.processMouseTouch = function (action, x, y) {
     if (action == 'touchend') return;
     this.setVal(x);

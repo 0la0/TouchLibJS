@@ -1,15 +1,13 @@
 
 
-  /****************************************************************
-   *
-   *  BUTTONS
-   *
-   *  See demoDriver.html for implementation examples
-   *
-   *  Types: ToggleButton, TriggerButton
-   *
-   ***************************************************************/
-
+  /*******************************
+   *                             *
+   *          BUTTON             *
+   *   unlike other objects,     *
+   *   buttons are not extended  *
+   *   from CanvasObj            *
+   *                             *
+   *******************************/
   var Button = function (params) {
     if (!params) return;
     this.val;
@@ -64,6 +62,9 @@
     this.createListeners(this);
   }
 
+  /**
+   *  Add listeners for button objects
+   **/
   Button.prototype.createListeners = function (self) {
     try {
       self.element.addEventListener('mousedown', function (e) {
@@ -84,10 +85,14 @@
     
   }
 
-  Button.prototype.processAction = function () {
-    console.log('process action - no subtype');
-  }
+  /**
+   *  SUBCLASS MUST IMPLEMENT PROCESS ACTION
+   **/
+  Button.prototype.processAction = function () {}
 
+  /**
+   *  RENDER FUNCITON FOR ALL SUBCLASSES
+   **/  
   Button.prototype.render = function (val) {
     if (val) {
 

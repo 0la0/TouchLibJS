@@ -1,7 +1,7 @@
 
-  /************************************************
-   *           DISCRETE VERTICAL SLIDER
-   *           EXTENDS  VERTICAL SLIDER
+  /***********************************************
+   *           DISCRETE VERTICAL SLIDER          *
+   *           EXTENDS  VERTICAL SLIDER          *
    ***********************************************/
   DiscreteVertSlider.prototype = new Slider();
   DiscreteVertSlider.prototype.constructor = HorizSlider; 
@@ -76,6 +76,7 @@
   }
 
   /**
+   *  @Override
    *  VERTICAL SPECIFIC RENDER
    **/
   DiscreteVertSlider.prototype.render = function () {
@@ -92,6 +93,9 @@
     this.renderIsInQueue = false;
   }
 
+  /**
+   *  @Override
+   **/
   DiscreteVertSlider.prototype.processMouseTouch = function (action, x, y) {
     if (action == 'touchend') return;
     this.setVal(y);

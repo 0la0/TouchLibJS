@@ -13,7 +13,7 @@
   }
 
   /**
-   *  SET VALUE [0 - WIDTH and HEIGHT]
+   *  SET VALUE ([0 - WIDTH], [0 - HEIGHT])
    **/
   Joystick.prototype.setRealPosition = function (x, y) {
     Slider2D.prototype.setRealPosition.call(this, x, y);
@@ -23,6 +23,10 @@
     });
   }
 
+  /**
+   *  @Override
+   *  PROCESS MOUSE OR TOUCH COORDINATE DATA
+   **/
   Joystick.prototype.processMouseTouch = function (action, x, y) {
     if (action == 'mouseout' || 
         action == 'mouseup'  ||
@@ -37,7 +41,7 @@
   }
 
   /**
-   *  CALL SUPER AND THEN RENDER CROSSHAIRS
+   *  @Override
    **/
   Joystick.prototype.render = function () {
     Slider2D.prototype.render.call(this);

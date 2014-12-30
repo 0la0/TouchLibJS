@@ -68,8 +68,14 @@
     }
   }
 
+  /**
+   *  SUBCLASS MUST IMPLEMENT RENDER FUNCITON
+   **/
   CanvasObject.prototype.render = function () {}
 
+  /**
+   *  SUBCLASS MUST IMPLEMENT PROCESS MOUSE TOUCH
+   **/
   CanvasObject.prototype.processMouseTouch = function (action, x, y) {}
 
   /**
@@ -86,7 +92,7 @@
   /**
    *  REGISTER MOUSE AND TOUCH LISTENERS
    *  common to all widgets that extend canvasObject
-   *  extending objects must override processMouseTouch()
+   *  mouse or touch locations are sent to processMouseTouch()
    **/
   CanvasObject.prototype.registerListeners = function (self) {
     self.canvasEl.addEventListener('mousedown', function (e) {
@@ -154,7 +160,9 @@
 
 
   /**********************************
+   *                                *
    *  Slider Extends Canvas Object  *
+   *                                *
    **********************************/
   Slider.prototype = new CanvasObject();
   Slider.prototype.constructor = Slider;
@@ -221,7 +229,7 @@
   }
 
   /**
-   *  -Override
+   *  @Override
    *  SETS THE CSS CLASS OF THE SLIDER ELEMENTS
    **/
   Slider.prototype.setClass = function (className) {
@@ -235,7 +243,7 @@
   }
 
   /**
-   *  SETS THE VALUE BASED ON A NORMALIZED INPUT [0 - 1]
+   *  SETS THE VALUE BASED ON A NORMALIZED DOMAIN [0 - 1]
    **/
   Slider.prototype.setValue = function (val) {
     if (val < 0 || val > 1) {
@@ -251,6 +259,8 @@
 
   /**
    *  SETS THE REGULAR VALUE AND UPDATES THE UI
+   *  the domain of the regular value is
+   *  [0 - this.height] or [0 - this.width]
    **/
   Slider.prototype.setVal = function (val) {
     if (val < 0) {
@@ -262,6 +272,7 @@
   }
 
   /**
+   *  @Override
    *  COMMON RENDER VALUE PROCEDURES
    **/
   Slider.prototype.render = function () {
@@ -271,9 +282,9 @@
   }
 
 
-  /************************************************
-   *            VERTICAL SLIDER
-   *            EXTENDS  SLIDER
+  /***********************************************
+   *            VERTICAL SLIDER                  *
+   *            EXTENDS  SLIDER                  *
    ***********************************************/
   VertSlider.prototype = new Slider();
   VertSlider.prototype.constructor = VertSlider;
@@ -282,6 +293,7 @@
   } 
 
   /**
+   *  @Override
    *  SETS THE VALUE AND UPDATES THE UI
    **/
   VertSlider.prototype.setVal = function (val) {
@@ -300,6 +312,7 @@
   }
 
   /**
+   *  @Override
    *  VERTICAL SPECIFIC RENDER
    **/
   VertSlider.prototype.render = function () {
@@ -310,15 +323,18 @@
     this.renderIsInQueue = false;
   }
 
+  /**
+   *  @Override
+   **/
   VertSlider.prototype.processMouseTouch = function (action, x, y) {
     if (action == 'touchend') return;
     this.setVal(this.height - y);
   }
 
 
-  /************************************************
-   *            HORIZONTAL SLIDER
-   *            EXTENDS    SLIDER
+  /***********************************************
+   *            HORIZONTAL SLIDER                *
+   *            EXTENDS    SLIDER                *
    ***********************************************/
   HorizSlider.prototype = new Slider();
   HorizSlider.prototype.constructor = HorizSlider; 
@@ -345,6 +361,7 @@
   }
 
   /**
+   *  @Override
    *  HORIZONTAL SPECIFIC RENDER
    **/
   HorizSlider.prototype.render = function () {
@@ -355,15 +372,18 @@
     this.renderIsInQueue = false;
   }
 
+  /**
+   *  @Override
+   **/
   HorizSlider.prototype.processMouseTouch = function (action, x, y) {
     if (action == 'touchend') return;
     this.setVal(x);
   }
 
 
-  /************************************************
-   *           DISCRETE VERTICAL SLIDER
-   *           EXTENDS  VERTICAL SLIDER
+  /***********************************************
+   *           DISCRETE VERTICAL SLIDER          *
+   *           EXTENDS  VERTICAL SLIDER          *
    ***********************************************/
   DiscreteVertSlider.prototype = new Slider();
   DiscreteVertSlider.prototype.constructor = HorizSlider; 
@@ -438,6 +458,7 @@
   }
 
   /**
+   *  @Override
    *  VERTICAL SPECIFIC RENDER
    **/
   DiscreteVertSlider.prototype.render = function () {
@@ -454,6 +475,9 @@
     this.renderIsInQueue = false;
   }
 
+  /**
+   *  @Override
+   **/
   DiscreteVertSlider.prototype.processMouseTouch = function (action, x, y) {
     if (action == 'touchend') return;
     this.setVal(y);
@@ -461,9 +485,9 @@
 
 
   /************************************************
-   *         DISCRETE HORIZONTAL SLIDER
-   *         EXTENDS  HORIZONTAL SLIDER
-   ***********************************************/
+   *         DISCRETE HORIZONTAL SLIDER           *
+   *         EXTENDS  HORIZONTAL SLIDER           *
+   ************************************************/
   DiscreteHorizSlider.prototype = new Slider();
   DiscreteHorizSlider.prototype.constructor = HorizSlider; 
   function DiscreteHorizSlider (params) {
@@ -537,6 +561,7 @@
   }
 
   /**
+   *  @Override
    *  HORIZONTAL SPECIFIC RENDER
    **/
   DiscreteHorizSlider.prototype.render = function () {
@@ -553,201 +578,14 @@
     this.renderIsInQueue = false;
   }
 
+  /**
+   *  @Override
+   **/
   DiscreteHorizSlider.prototype.processMouseTouch = function (action, x, y) {
     if (action == 'touchend') return;
     this.setVal(x);
   }
 
-
-
-  /****************************************************************
-   *
-   *  BUTTONS
-   *
-   *  See demoDriver.html for implementation examples
-   *
-   *  Types: ToggleButton, TriggerButton
-   *
-   ***************************************************************/
-
-  var Button = function (params) {
-    if (!params) return;
-    this.val;
-    this.notify;
-    this.element;
-    this.on;
-    this.off;
-    
-    if (params.elementId) {
-      try {
-        this.element = document.getElementById(params.elementId);
-        if (this.element == null) {
-          throw 'cannot build button: param object needs an elementId';
-          return;
-        }
-      } catch (err) {
-        console.log('err getting element');
-      }
-    } else {
-      throw 'cannot build button: param object needs an elementId';
-      return; 
-    }
-
-    if (typeof(params.notify) == 'function') {
-      this.notify = params.notify;
-    } else {
-      throw 'button constructor needs an notify function to be useful';
-      return;
-    }
-
-    if (params.on) {
-      this.on = params.on;
-    } else {
-      throw 'pram object needs on attributes';
-    }
-
-    if (params.off) {
-      this.off = params.off;
-    } else {
-      throw 'pram object needs off attributes';
-    }
-
-    if (params.cssClassName) {
-      this.setClass(params.cssClassName);
-    }
-
-    if (params.css) {
-      for (var key in params.css) {
-        this.element.style[key] = params.css[key];
-      }
-    } 
-    this.createListeners(this);
-  }
-
-  Button.prototype.createListeners = function (self) {
-    try {
-      self.element.addEventListener('mousedown', function (e) {
-        e.preventDefault();
-        self.processAction();
-      }, false);
-    } catch (err) {
-      console.log('error creating mouse listener');
-    }
-    try {
-      self.element.addEventListener('touchstart', function (e) {
-        e.preventDefault();
-        self.processAction();
-      }, false);
-    } catch (err) {
-      console.log('error creating touch listener'); 
-    }
-    
-  }
-
-  Button.prototype.processAction = function () {
-    console.log('process action - no subtype');
-  }
-
-  Button.prototype.render = function (val) {
-    if (val) {
-
-      for (var key in this.on) {
-        if (key == 'innerHTML') {
-          this.element[key] = this.on[key];
-        } else {
-          this.element.style[key] = this.on[key];
-        }
-      }
-
-    } 
-    else {
-
-      for (var key in this.off) {
-        if (key == 'innerHTML') {
-          this.element[key] = this.off[key];
-        } else {
-          try {
-            this.element.style[key] = this.off[key];  
-          } catch (err) {
-            console.log('err: ', err);
-          } 
-        }
-      }
-
-    }
-  }
-
-  /**
-   *  SETS THE CSS CLASS OF THE BUTTON
-   **/
-  Button.prototype.setClass = function (className) {
-    if (className == null) {
-      console.log('error: no class given');
-      return; 
-    }
-    this.element.className = className;
-  }
-
-    //----------------------------------------//
-   //     TOGGLE BUTTON EXTENDS BUTTON       //
-  //----------------------------------------//
-  ToggleButton.prototype = new Button();
-  ToggleButton.prototype.constructor = ToggleButton;
-  function ToggleButton (params) {
-    Button.call(this, params);
-    if (params.val) {
-      this.setVal(params.val);
-    } else {
-      this.setVal(false);
-    }
-  } 
-
-  ToggleButton.prototype.processAction = function () {
-    this.val = !this.val;
-    this.notify(this.val);
-    this.render(this.val);
-  }
-
-  ToggleButton.prototype.setVal = function (val) {
-    this.val = val;
-    this.notify(this.val);
-    this.render(this.val);
-  }
-
-  ToggleButton.prototype.getVal = function () {
-    return this.val;
-  }
-
-
-    //----------------------------------------//
-   //    TRIGGER BUTTON EXTENDS BUTTON       //
-  //----------------------------------------//
-  TriggerButton.prototype = new Button();
-  TriggerButton.prototype.constructor = TriggerButton;
-  function TriggerButton (params) {
-    Button.call(this, params);
-    this.timeout;
-    this.timeoutTime;
-    if (!isNaN(params.triggerTimeout)) {
-      this.timeoutTime = params.triggerTimeout;
-    } else {
-      throw 'constructor error: need a numeric timeout parameter';
-      return;
-    }
-    this.render(false);
-  } 
-
-  TriggerButton.prototype.processAction = function () {
-    this.notify();
-    //turn on
-    this.render(true);
-    clearTimeout(this.timeout);
-    var self = this;
-    this.timeout = setTimeout(function () {
-      //turn off
-      self.render(false);
-    }, self.timeoutTime);
-  }
 
 
   /************************************
@@ -786,6 +624,7 @@
   }
 
   /**
+   *  @Override
    *  PROCESS MOUSE OR TOUCH COORDINATE DATA
    **/
   Slider2D.prototype.processMouseTouch = function (action, x, y) {
@@ -804,6 +643,9 @@
     this.requestRender();
   }
 
+  /**
+   *  @Override
+   **/
   Slider2D.prototype.render = function () {
     //clear last pos
     this.g2d.clearRect(
@@ -826,7 +668,7 @@
   }
 
   /**
-   *  SET VALUE [0 - WIDTH and HEIGHT]
+   *  SET VALUE ([0 - WIDTH], [0 - HEIGHT])
    **/
   Slider2D.prototype.setRealPosition = function (x, y) {
     this.normalVal.x = x / this.width;
@@ -836,21 +678,21 @@
   }
 
   /**
-   *  SET VALUE [0 - 1]
+   *  SET NORMALIZED VALUE ([0 - 1], [0 - 1])
    **/
   Slider2D.prototype.setNormalPosition = function (x, y) {
     this.processMouseTouch('', x * this.width, this.height - y * this.height);
   }
 
   /**
-   *  RETURN SLIDER POSITION VALUE [0 - WIDTH and HEIGHT]
+   *  RETURN SLIDER POSITION VALUE [0 - WIDTH], [0 - HEIGHT]
    **/
   Slider2D.prototype.getRealVal = function () {
     return {x: this.cvsPos.thisX, y: this.cvsPos.thisY};
   }
 
   /**
-   *  RETURN NORMALIZED VALUE [0 - 1]
+   *  RETURN NORMALIZED VALUE [0 - 1], [0 - 1]
    **/
   Slider2D.prototype.getNormalVal = function () {
     return this.normalVal;
@@ -871,7 +713,7 @@
   }
 
   /**
-   *  SET VALUE [0 - WIDTH and HEIGHT]
+   *  SET VALUE ([0 - WIDTH], [0 - HEIGHT])
    **/
   Joystick.prototype.setRealPosition = function (x, y) {
     Slider2D.prototype.setRealPosition.call(this, x, y);
@@ -881,6 +723,10 @@
     });
   }
 
+  /**
+   *  @Override
+   *  PROCESS MOUSE OR TOUCH COORDINATE DATA
+   **/
   Joystick.prototype.processMouseTouch = function (action, x, y) {
     if (action == 'mouseout' || 
         action == 'mouseup'  ||
@@ -895,7 +741,7 @@
   }
 
   /**
-   *  CALL SUPER AND THEN RENDER CROSSHAIRS
+   *  @Override
    **/
   Joystick.prototype.render = function () {
     Slider2D.prototype.render.call(this);
@@ -970,6 +816,9 @@
     this.render();
   }
 
+  /**
+   *  @Override
+   **/
   Knob.prototype.render = function () {
     //outer ring
     this.g2d.strokeStyle = this.outline;
@@ -988,6 +837,9 @@
     this.renderIsInQueue = false;
   }
 
+  /**
+   *  @Override
+   **/
   Knob.prototype.processMouseTouch = function (action, x, y) {
     if (action == 'touchend') return;
     x = x - this.halfWidth;
@@ -1015,10 +867,16 @@
     this.requestRender();
   }
 
+  /**
+   *  RETURNS THE NORMALIZED VALUE [0 - 1]
+   **/
   Knob.prototype.getVal = function () {
     return this.realVal;
   }
 
+  /**
+   *  SETS THE NORMALIZED VALUE [0 - 1]
+   **/
   Knob.prototype.setVal = function (val) {
     if (val < 0 || val > 1) {
       throw 'valueOutOfBounds Exception, takes [0 - 1]';
@@ -1057,7 +915,7 @@
   }
 
   /*
-   *  Set one value in the slider field
+   *  Set one normalized value in the slider field
    */
   SliderField.prototype.setVal = function (index, val) {
     if (index < 0 || index >= this.numSliders) {
@@ -1072,7 +930,7 @@
   }
 
   /*
-   *  Set all values in the slider field
+   *  Set all normalized values in the slider field
    */
   SliderField.prototype.setVals = function (vals) {
     if (!(vals instanceof Array)) {
@@ -1094,7 +952,7 @@
   }
 
   /*
-   *  Get one value in the slider field
+   *  Get one normalized value in the slider field
    */
   SliderField.prototype.getVal = function (index) {
     if (index < 0 || index >= this.numSliders) {
@@ -1105,7 +963,7 @@
   }
 
   /*
-   *  Get all values in the slider field - realVals array
+   *  Get all normalized values in the slider field - realVals array
    */
   SliderField.prototype.getVal = function () {
     return this.realVals;
@@ -1123,7 +981,9 @@
     this.render();
   } 
 
-  // -Override
+  /**
+   *  @Override
+   **/
   SliderFieldHoriz.prototype.processMouseTouch = function (action, x, y) {
     if (action == 'touchend') return;
     //get slider index
@@ -1141,7 +1001,9 @@
     this.setVal(index, x / this.width);
   }
 
-  // -Override
+  /**
+   *  @Override
+   **/
   SliderFieldHoriz.prototype.render = function () {
     this.g2d.clearRect(0, 0, this.width, this.height);
     for (var i = 0; i < this.numSliders; i++) {
@@ -1166,7 +1028,9 @@
     this.render();
   }
 
-  // -Override
+  /**
+   *  @Override
+   **/
   SliderFieldVert.prototype.processMouseTouch = function (action, x, y) {
     if (action == 'touchend') return;
     //get slider index
@@ -1183,7 +1047,9 @@
     this.setVal(index, (this.height - y) / this.height);
   }
 
-  // -Override
+  /**
+   *  @Override
+   **/
   SliderFieldVert.prototype.render = function () {
     this.g2d.clearRect(0, 0, this.width, this.height);
     for (var i = 0; i < this.numSliders; i++) {
@@ -1193,6 +1059,213 @@
     this.renderIsInQueue = false;
   }
 
+
+
+  /*******************************
+   *                             *
+   *          BUTTON             *
+   *   unlike other objects,     *
+   *   buttons are not extended  *
+   *   from CanvasObj            *
+   *                             *
+   *******************************/
+  var Button = function (params) {
+    if (!params) return;
+    this.val;
+    this.notify;
+    this.element;
+    this.on;
+    this.off;
+    
+    if (params.elementId) {
+      try {
+        this.element = document.getElementById(params.elementId);
+        if (this.element == null) {
+          throw 'cannot build button: param object needs an elementId';
+          return;
+        }
+      } catch (err) {
+        console.log('err getting element');
+      }
+    } else {
+      throw 'cannot build button: param object needs an elementId';
+      return; 
+    }
+
+    if (typeof(params.notify) == 'function') {
+      this.notify = params.notify;
+    } else {
+      throw 'button constructor needs an notify function to be useful';
+      return;
+    }
+
+    if (params.on) {
+      this.on = params.on;
+    } else {
+      throw 'pram object needs on attributes';
+    }
+
+    if (params.off) {
+      this.off = params.off;
+    } else {
+      throw 'pram object needs off attributes';
+    }
+
+    if (params.cssClassName) {
+      this.setClass(params.cssClassName);
+    }
+
+    if (params.css) {
+      for (var key in params.css) {
+        this.element.style[key] = params.css[key];
+      }
+    } 
+    this.createListeners(this);
+  }
+
+  /**
+   *  Add listeners for button objects
+   **/
+  Button.prototype.createListeners = function (self) {
+    try {
+      self.element.addEventListener('mousedown', function (e) {
+        e.preventDefault();
+        self.processAction();
+      }, false);
+    } catch (err) {
+      console.log('error creating mouse listener');
+    }
+    try {
+      self.element.addEventListener('touchstart', function (e) {
+        e.preventDefault();
+        self.processAction();
+      }, false);
+    } catch (err) {
+      console.log('error creating touch listener'); 
+    }
+    
+  }
+
+  /**
+   *  SUBCLASS MUST IMPLEMENT PROCESS ACTION
+   **/
+  Button.prototype.processAction = function () {}
+
+  /**
+   *  RENDER FUNCITON FOR ALL SUBCLASSES
+   **/  
+  Button.prototype.render = function (val) {
+    if (val) {
+
+      for (var key in this.on) {
+        if (key == 'innerHTML') {
+          this.element[key] = this.on[key];
+        } else {
+          this.element.style[key] = this.on[key];
+        }
+      }
+
+    } 
+    else {
+
+      for (var key in this.off) {
+        if (key == 'innerHTML') {
+          this.element[key] = this.off[key];
+        } else {
+          try {
+            this.element.style[key] = this.off[key];  
+          } catch (err) {
+            console.log('err: ', err);
+          } 
+        }
+      }
+
+    }
+  }
+
+  /**
+   *  SETS THE CSS CLASS OF THE BUTTON
+   **/
+  Button.prototype.setClass = function (className) {
+    if (className == null) {
+      console.log('error: no class given');
+      return; 
+    }
+    this.element.className = className;
+  }
+
+  /********************************************
+  *       TOGGLE BUTTON EXTENDS BUTTON        *
+  *********************************************/
+  ToggleButton.prototype = new Button();
+  ToggleButton.prototype.constructor = ToggleButton;
+  function ToggleButton (params) {
+    Button.call(this, params);
+    if (params.val) {
+      this.setVal(params.val);
+    } else {
+      this.setVal(false);
+    }
+  } 
+
+  /**
+   *  @Override
+   **/
+  ToggleButton.prototype.processAction = function () {
+    this.val = !this.val;
+    this.notify(this.val);
+    this.render(this.val);
+  }
+
+  /**
+   *  Set the value of the button, takes a boolean parameter
+   **/
+  ToggleButton.prototype.setVal = function (val) {
+    this.val = val;
+    this.notify(this.val);
+    this.render(this.val);
+  }
+
+  /**
+   *  Returns the value of the button - a boolean value
+   **/
+  ToggleButton.prototype.getVal = function () {
+    return this.val;
+  }
+
+
+  /********************************************
+  *      TRIGGER BUTTON EXTENDS BUTTON        *
+  *********************************************/
+  TriggerButton.prototype = new Button();
+  TriggerButton.prototype.constructor = TriggerButton;
+  function TriggerButton (params) {
+    Button.call(this, params);
+    this.timeout;
+    this.timeoutTime;
+    if (!isNaN(params.triggerTimeout)) {
+      this.timeoutTime = params.triggerTimeout;
+    } else {
+      throw 'constructor error: need a numeric timeout parameter';
+      return;
+    }
+    this.render(false);
+  } 
+
+  /**
+   *  TRIGGERS THE BUTTON
+   **/
+  TriggerButton.prototype.processAction = function () {
+    this.notify();
+    //turn on
+    this.render(true);
+    clearTimeout(this.timeout);
+    var self = this;
+    this.timeout = setTimeout(function () {
+      //turn off
+      self.render(false);
+    }, self.timeoutTime);
+  }
 
   TouchLib.VertSlider = VertSlider;
   TouchLib.HorizSlider = HorizSlider;

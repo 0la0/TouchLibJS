@@ -13,7 +13,9 @@
     this.render();
   }
 
-  // -Override
+  /**
+   *  @Override
+   **/
   SliderFieldVert.prototype.processMouseTouch = function (action, x, y) {
     if (action == 'touchend') return;
     //get slider index
@@ -30,7 +32,9 @@
     this.setVal(index, (this.height - y) / this.height);
   }
 
-  // -Override
+  /**
+   *  @Override
+   **/
   SliderFieldVert.prototype.render = function () {
     this.g2d.clearRect(0, 0, this.width, this.height);
     for (var i = 0; i < this.numSliders; i++) {

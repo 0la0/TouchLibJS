@@ -1,7 +1,7 @@
 
-    //----------------------------------------//
-   //    TRIGGER BUTTON EXTENDS BUTTON       //
-  //----------------------------------------//
+  /********************************************
+  *      TRIGGER BUTTON EXTENDS BUTTON        *
+  *********************************************/
   TriggerButton.prototype = new Button();
   TriggerButton.prototype.constructor = TriggerButton;
   function TriggerButton (params) {
@@ -17,6 +17,9 @@
     this.render(false);
   } 
 
+  /**
+   *  TRIGGERS THE BUTTON
+   **/
   TriggerButton.prototype.processAction = function () {
     this.notify();
     //turn on

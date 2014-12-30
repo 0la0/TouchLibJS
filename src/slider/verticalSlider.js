@@ -1,7 +1,7 @@
 
-  /************************************************
-   *            VERTICAL SLIDER
-   *            EXTENDS  SLIDER
+  /***********************************************
+   *            VERTICAL SLIDER                  *
+   *            EXTENDS  SLIDER                  *
    ***********************************************/
   VertSlider.prototype = new Slider();
   VertSlider.prototype.constructor = VertSlider;
@@ -10,6 +10,7 @@
   } 
 
   /**
+   *  @Override
    *  SETS THE VALUE AND UPDATES THE UI
    **/
   VertSlider.prototype.setVal = function (val) {
@@ -28,6 +29,7 @@
   }
 
   /**
+   *  @Override
    *  VERTICAL SPECIFIC RENDER
    **/
   VertSlider.prototype.render = function () {
@@ -38,6 +40,9 @@
     this.renderIsInQueue = false;
   }
 
+  /**
+   *  @Override
+   **/
   VertSlider.prototype.processMouseTouch = function (action, x, y) {
     if (action == 'touchend') return;
     this.setVal(this.height - y);

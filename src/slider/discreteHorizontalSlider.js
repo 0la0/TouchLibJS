@@ -1,8 +1,8 @@
 
   /************************************************
-   *         DISCRETE HORIZONTAL SLIDER
-   *         EXTENDS  HORIZONTAL SLIDER
-   ***********************************************/
+   *         DISCRETE HORIZONTAL SLIDER           *
+   *         EXTENDS  HORIZONTAL SLIDER           *
+   ************************************************/
   DiscreteHorizSlider.prototype = new Slider();
   DiscreteHorizSlider.prototype.constructor = HorizSlider; 
   function DiscreteHorizSlider (params) {
@@ -76,6 +76,7 @@
   }
 
   /**
+   *  @Override
    *  HORIZONTAL SPECIFIC RENDER
    **/
   DiscreteHorizSlider.prototype.render = function () {
@@ -92,6 +93,9 @@
     this.renderIsInQueue = false;
   }
 
+  /**
+   *  @Override
+   **/
   DiscreteHorizSlider.prototype.processMouseTouch = function (action, x, y) {
     if (action == 'touchend') return;
     this.setVal(x);

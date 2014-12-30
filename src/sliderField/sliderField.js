@@ -23,7 +23,7 @@
   }
 
   /*
-   *  Set one value in the slider field
+   *  Set one normalized value in the slider field
    */
   SliderField.prototype.setVal = function (index, val) {
     if (index < 0 || index >= this.numSliders) {
@@ -38,7 +38,7 @@
   }
 
   /*
-   *  Set all values in the slider field
+   *  Set all normalized values in the slider field
    */
   SliderField.prototype.setVals = function (vals) {
     if (!(vals instanceof Array)) {
@@ -60,7 +60,7 @@
   }
 
   /*
-   *  Get one value in the slider field
+   *  Get one normalized value in the slider field
    */
   SliderField.prototype.getVal = function (index) {
     if (index < 0 || index >= this.numSliders) {
@@ -71,7 +71,7 @@
   }
 
   /*
-   *  Get all values in the slider field - realVals array
+   *  Get all normalized values in the slider field - realVals array
    */
   SliderField.prototype.getVal = function () {
     return this.realVals;

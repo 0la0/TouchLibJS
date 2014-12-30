@@ -1,6 +1,8 @@
 
   /**********************************
+   *                                *
    *  Slider Extends Canvas Object  *
+   *                                *
    **********************************/
   Slider.prototype = new CanvasObject();
   Slider.prototype.constructor = Slider;
@@ -67,7 +69,7 @@
   }
 
   /**
-   *  -Override
+   *  @Override
    *  SETS THE CSS CLASS OF THE SLIDER ELEMENTS
    **/
   Slider.prototype.setClass = function (className) {
@@ -81,7 +83,7 @@
   }
 
   /**
-   *  SETS THE VALUE BASED ON A NORMALIZED INPUT [0 - 1]
+   *  SETS THE VALUE BASED ON A NORMALIZED DOMAIN [0 - 1]
    **/
   Slider.prototype.setValue = function (val) {
     if (val < 0 || val > 1) {
@@ -97,6 +99,8 @@
 
   /**
    *  SETS THE REGULAR VALUE AND UPDATES THE UI
+   *  the domain of the regular value is
+   *  [0 - this.height] or [0 - this.width]
    **/
   Slider.prototype.setVal = function (val) {
     if (val < 0) {
@@ -108,6 +112,7 @@
   }
 
   /**
+   *  @Override
    *  COMMON RENDER VALUE PROCEDURES
    **/
   Slider.prototype.render = function () {
