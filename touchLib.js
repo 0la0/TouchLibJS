@@ -277,7 +277,7 @@
    **/
   Slider.prototype.render = function () {
     if (!this.outputIsOverridden) {
-      this.outputEl.innerHTML = this.getVal();  
+      this.outputEl.textContent = this.getVal();  
     }
   }
 
@@ -1158,7 +1158,7 @@
     if (val) {
 
       for (var key in this.on) {
-        if (key == 'innerHTML') {
+        if (key == 'textContent') {
           this.element[key] = this.on[key];
         } else {
           this.element.style[key] = this.on[key];
@@ -1169,14 +1169,10 @@
     else {
 
       for (var key in this.off) {
-        if (key == 'innerHTML') {
+        if (key == 'textContent') {
           this.element[key] = this.off[key];
         } else {
-          try {
-            this.element.style[key] = this.off[key];  
-          } catch (err) {
-            console.log('err: ', err);
-          } 
+          this.element.style[key] = this.off[key];   
         }
       }
 

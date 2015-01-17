@@ -117,7 +117,7 @@
    **/
   Slider.prototype.render = function () {
     if (!this.outputIsOverridden) {
-      this.outputEl.innerHTML = this.getVal();  
+      this.outputEl.textContent = this.getVal();  
     }
   }
 

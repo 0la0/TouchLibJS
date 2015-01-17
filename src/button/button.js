@@ -97,7 +97,7 @@
     if (val) {
 
       for (var key in this.on) {
-        if (key == 'innerHTML') {
+        if (key == 'textContent') {
           this.element[key] = this.on[key];
         } else {
           this.element.style[key] = this.on[key];
@@ -108,14 +108,10 @@
     else {
 
       for (var key in this.off) {
-        if (key == 'innerHTML') {
+        if (key == 'textContent') {
           this.element[key] = this.off[key];
         } else {
-          try {
-            this.element.style[key] = this.off[key];  
-          } catch (err) {
-            console.log('err: ', err);
-          } 
+          this.element.style[key] = this.off[key];   
         }
       }
 
