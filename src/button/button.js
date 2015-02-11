@@ -62,69 +62,74 @@
     this.createListeners(this);
   }
 
-  /**
-   *  Add listeners for button objects
-   **/
-  Button.prototype.createListeners = function (self) {
-    try {
-      self.element.addEventListener('mousedown', function (e) {
-        e.preventDefault();
-        self.processAction();
-      }, false);
-    } catch (err) {
-      console.log('error creating mouse listener');
-    }
-    try {
-      self.element.addEventListener('touchstart', function (e) {
-        e.preventDefault();
-        self.processAction();
-      }, false);
-    } catch (err) {
-      console.log('error creating touch listener'); 
-    }
+  Button.prototype = {
     
-  }
-
-  /**
-   *  SUBCLASS MUST IMPLEMENT PROCESS ACTION
-   **/
-  Button.prototype.processAction = function () {}
-
-  /**
-   *  RENDER FUNCITON FOR ALL SUBCLASSES
-   **/  
-  Button.prototype.render = function (val) {
-    if (val) {
-
-      for (var key in this.on) {
-        if (key == 'textContent') {
-          this.element[key] = this.on[key];
-        } else {
-          this.element.style[key] = this.on[key];
-        }
+    /**
+     *  Add listeners for button objects
+     **/
+    createListeners: function (self) {
+      try {
+        self.element.addEventListener('mousedown', function (e) {
+          e.preventDefault();
+          self.processAction();
+        }, false);
+      } catch (err) {
+        console.log('error creating mouse listener');
       }
-
-    } 
-    else {
-
-      for (var key in this.off) {
-        if (key == 'textContent') {
-          this.element[key] = this.off[key];
-        } else {
-          this.element.style[key] = this.off[key];   
-        }
+      try {
+        self.element.addEventListener('touchstart', function (e) {
+          e.preventDefault();
+          self.processAction();
+        }, false);
+      } catch (err) {
+        console.log('error creating touch listener'); 
       }
+    },
 
-    }
-  }
+    /**
+     *  RENDER FUNCITON FOR ALL SUBCLASSES
+     **/  
+    render: function (val) {
+      if (val) {
 
-  /**
-   *  SETS THE CSS CLASS OF THE BUTTON
-   **/
-  Button.prototype.setClass = function (className) {
-    if (className == null) {
-      console.log('error: no class given');
-      return; 
-    }
-    this.element.className = className;
-  }
+        for (var key in this.on) {
+          if (key == 'textContent') {
+            this.element[key] = this.on[key];
+          } else {
+            this.element.style[key] = this.on[key];
+          }
+        }
+
+      } 
+      else {
+
+        for (var key in this.off) {
+          if (key == 'textContent') {
+            this.element[key] = this.off[key];
+          } else {
+            this.element.style[key] = this.off[key];   
+          }
+        }
+
+      }
+    },
+
+    /**
+     *  SETS THE CSS CLASS OF THE BUTTON
+     **/
+    setClass: function (className) {
+      if (className == null) {
+        console.log('error: no class given');
+        return; 
+      }   
+      this.element.className = className;
+    },
+
+    /**
+     *  SUBCLASS MUST IMPLEMENT PROCESS ACTION
+     **/
+    processAction: function () {}
+
+  };
+
+  

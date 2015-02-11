@@ -39,126 +39,130 @@
     this.registerListeners(this);
   }
 
-  /**
-   *  SET THE SIZE OF THE CANVAS ELEMENT
-   **/
-  CanvasObject.prototype.setSize = function (width, height) {
-    this.width = width;
-    this.height = height;
-    this.halfWidth = Math.round(width / 2);
-    this.halfHeight = Math.round(height / 2);
-    this.canvasEl.width = width;
-    this.canvasEl.height = height;
-    this.g2d.width = this.canvasEl.width;
-    this.g2d.height = this.canvasEl.height;
-  }
+  CanvasObject.prototype = {
 
-  /**
-   *  FUNCTION WRAPPER FOR REQUEST ANIMATION FRAME
-   *  child objects must implement a render function and
-   *  it must set renderIsInQueue to false when finished 
-   **/
-  CanvasObject.prototype.requestRender = function () {
-    if (!this.renderIsInQueue) {
-      this.renderIsInQueue = true;
-      var self = this;
-      requestAnimationFrame(function () {
-        self.render();
-      });
-    }
-  }
+    /**
+     *  SET THE SIZE OF THE CANVAS ELEMENT
+     **/
+    setSize: function (width, height) {
+      this.width = width;
+      this.height = height;
+      this.halfWidth = Math.round(width / 2);
+      this.halfHeight = Math.round(height / 2);
+      this.canvasEl.width = width;
+      this.canvasEl.height = height;
+      this.g2d.width = this.canvasEl.width;
+      this.g2d.height = this.canvasEl.height;
+    },
 
-  /**
-   *  SUBCLASS MUST IMPLEMENT RENDER FUNCITON
-   **/
-  CanvasObject.prototype.render = function () {}
+    /**
+     *  FUNCTION WRAPPER FOR REQUEST ANIMATION FRAME
+     *  child objects must implement a render function and
+     *  it must set renderIsInQueue to false when finished 
+     **/
+    requestRender: function () {
+      if (!this.renderIsInQueue) {
+        this.renderIsInQueue = true;
+        var self = this;
+        requestAnimationFrame(function () {
+          self.render();
+        });
+      }
+    },
 
-  /**
-   *  SUBCLASS MUST IMPLEMENT PROCESS MOUSE TOUCH
-   **/
-  CanvasObject.prototype.processMouseTouch = function (action, x, y) {}
+    /**
+     *  SET THE CSS CLASS OF THE CANVAS DOM ELEMENT
+     **/
+    setClass: function (className) {
+      if (!className) {
+        console.log('error: no class given');
+        return; 
+      }
+      this.canvasEl.className = className;
+    },
 
-  /**
-   *  SET THE CSS CLASS OF THE CANVAS DOM ELEMENT
-   **/
-  CanvasObject.prototype.setClass = function (className) {
-    if (!className) {
-      console.log('error: no class given');
-      return; 
-    }
-    this.canvasEl.className = className;
-  }
-
-  /**
-   *  REGISTER MOUSE AND TOUCH LISTENERS
-   *  common to all widgets that extend canvasObject
-   *  mouse or touch locations are sent to processMouseTouch()
-   **/
-  CanvasObject.prototype.registerListeners = function (self) {
-    self.canvasEl.addEventListener('mousedown', function (e) {
-      e.preventDefault();
-      self.mouseIsDown = true;
-      self.processMouseTouch(
-        'mousedown',
-        e.pageX - this.offsetLeft,
-        e.pageY - this.offsetTop
-      );
-    }, false);
-    self.canvasEl.addEventListener('mousemove', function (e) {
-      e.preventDefault();
-      if (self.mouseIsDown) {
+    /**
+     *  REGISTER MOUSE AND TOUCH LISTENERS
+     *  common to all widgets that extend canvasObject
+     *  mouse or touch locations are sent to processMouseTouch()
+     **/
+    registerListeners: function (self) {
+      self.canvasEl.addEventListener('mousedown', function (e) {
+        e.preventDefault();
+        self.mouseIsDown = true;
         self.processMouseTouch(
           'mousedown',
           e.pageX - this.offsetLeft,
           e.pageY - this.offsetTop
         );
-      }
-    }, false);
-    self.canvasEl.addEventListener('mouseout', function (e) {
-      e.preventDefault();
-      self.mouseIsDown = false;
-    }, false);
-    self.canvasEl.addEventListener('mouseup', function (e) {
-      e.preventDefault();
-      self.processMouseTouch(
-        'mouseup',
-        e.pageX - this.offsetLeft,
-        e.pageY - this.offsetTop
-      );
-      self.mouseIsDown = false;
-    }, false);
-
-    self.canvasEl.addEventListener('touchstart', function (e) {
-      e.preventDefault();
-      for (var i = 0; i < e.touches.length; i++) {
-        if (e.touches[i].target === this) {
+      }, false);
+      self.canvasEl.addEventListener('mousemove', function (e) {
+        e.preventDefault();
+        if (self.mouseIsDown) {
           self.processMouseTouch(
-            'touchstart',
-            e.touches[i].pageX - this.offsetLeft,
-            e.touches[i].pageY - this.offsetTop
+            'mousedown',
+            e.pageX - this.offsetLeft,
+            e.pageY - this.offsetTop
           );
         }
-      }
-    }, false);
-    self.canvasEl.addEventListener('touchmove', function (e) {
-      e.preventDefault();
-      for (var i = 0; i < e.touches.length; i++) {
-        if (e.touches[i].target === this) {
-          self.processMouseTouch(
-            'touchmove',
-            e.touches[i].pageX - this.offsetLeft,
-            e.touches[i].pageY - this.offsetTop
-          );
+      }, false);
+      self.canvasEl.addEventListener('mouseout', function (e) {
+        e.preventDefault();
+        self.mouseIsDown = false;
+      }, false);
+      self.canvasEl.addEventListener('mouseup', function (e) {
+        e.preventDefault();
+        self.processMouseTouch(
+          'mouseup',
+          e.pageX - this.offsetLeft,
+          e.pageY - this.offsetTop
+        );
+        self.mouseIsDown = false;
+      }, false);
+
+      self.canvasEl.addEventListener('touchstart', function (e) {
+        e.preventDefault();
+        for (var i = 0; i < e.touches.length; i++) {
+          if (e.touches[i].target === this) {
+            self.processMouseTouch(
+              'touchstart',
+              e.touches[i].pageX - this.offsetLeft,
+              e.touches[i].pageY - this.offsetTop
+            );
+          }
         }
-      }
-    }, false);
-    self.canvasEl.addEventListener('touchend', function (e) {
-      e.preventDefault();
-      self.processMouseTouch('touchend');
-    }, false);
-  }
+      }, false);
+      self.canvasEl.addEventListener('touchmove', function (e) {
+        e.preventDefault();
+        for (var i = 0; i < e.touches.length; i++) {
+          if (e.touches[i].target === this) {
+            self.processMouseTouch(
+              'touchmove',
+              e.touches[i].pageX - this.offsetLeft,
+              e.touches[i].pageY - this.offsetTop
+            );
+          }
+        }
+      }, false);
+      self.canvasEl.addEventListener('touchend', function (e) {
+        e.preventDefault();
+        self.processMouseTouch('touchend');
+      }, false);
+    },
 
+    /**
+     *  SUBCLASS MUST IMPLEMENT RENDER FUNCITON
+     **/
+    render: function () {},
 
+    /**
+     *  SUBCLASS MUST IMPLEMENT PROCESS MOUSE TOUCH
+     **/
+    processMouseTouch: function (action, x, y) {}
+
+  };
+
+  
   /**********************************
    *                                *
    *  Slider Extends Canvas Object  *
@@ -1123,72 +1127,77 @@
     this.createListeners(this);
   }
 
-  /**
-   *  Add listeners for button objects
-   **/
-  Button.prototype.createListeners = function (self) {
-    try {
-      self.element.addEventListener('mousedown', function (e) {
-        e.preventDefault();
-        self.processAction();
-      }, false);
-    } catch (err) {
-      console.log('error creating mouse listener');
-    }
-    try {
-      self.element.addEventListener('touchstart', function (e) {
-        e.preventDefault();
-        self.processAction();
-      }, false);
-    } catch (err) {
-      console.log('error creating touch listener'); 
-    }
+  Button.prototype = {
     
-  }
-
-  /**
-   *  SUBCLASS MUST IMPLEMENT PROCESS ACTION
-   **/
-  Button.prototype.processAction = function () {}
-
-  /**
-   *  RENDER FUNCITON FOR ALL SUBCLASSES
-   **/  
-  Button.prototype.render = function (val) {
-    if (val) {
-
-      for (var key in this.on) {
-        if (key == 'textContent') {
-          this.element[key] = this.on[key];
-        } else {
-          this.element.style[key] = this.on[key];
-        }
+    /**
+     *  Add listeners for button objects
+     **/
+    createListeners: function (self) {
+      try {
+        self.element.addEventListener('mousedown', function (e) {
+          e.preventDefault();
+          self.processAction();
+        }, false);
+      } catch (err) {
+        console.log('error creating mouse listener');
       }
-
-    } 
-    else {
-
-      for (var key in this.off) {
-        if (key == 'textContent') {
-          this.element[key] = this.off[key];
-        } else {
-          this.element.style[key] = this.off[key];   
-        }
+      try {
+        self.element.addEventListener('touchstart', function (e) {
+          e.preventDefault();
+          self.processAction();
+        }, false);
+      } catch (err) {
+        console.log('error creating touch listener'); 
       }
+    },
 
-    }
-  }
+    /**
+     *  RENDER FUNCITON FOR ALL SUBCLASSES
+     **/  
+    render: function (val) {
+      if (val) {
 
-  /**
-   *  SETS THE CSS CLASS OF THE BUTTON
-   **/
-  Button.prototype.setClass = function (className) {
-    if (className == null) {
-      console.log('error: no class given');
-      return; 
-    }
-    this.element.className = className;
-  }
+        for (var key in this.on) {
+          if (key == 'textContent') {
+            this.element[key] = this.on[key];
+          } else {
+            this.element.style[key] = this.on[key];
+          }
+        }
+
+      } 
+      else {
+
+        for (var key in this.off) {
+          if (key == 'textContent') {
+            this.element[key] = this.off[key];
+          } else {
+            this.element.style[key] = this.off[key];   
+          }
+        }
+
+      }
+    },
+
+    /**
+     *  SETS THE CSS CLASS OF THE BUTTON
+     **/
+    setClass: function (className) {
+      if (className == null) {
+        console.log('error: no class given');
+        return; 
+      }   
+      this.element.className = className;
+    },
+
+    /**
+     *  SUBCLASS MUST IMPLEMENT PROCESS ACTION
+     **/
+    processAction: function () {}
+
+  };
+
+  
 
   /********************************************
   *       TOGGLE BUTTON EXTENDS BUTTON        *
