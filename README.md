@@ -1,8 +1,8 @@
 #TouchLibJS
-UI toolkit for mouse and touch.  All of the widgets except for the buttons are based on the HTML5 canvas graphics context.
+UI toolkit for mouse and touch.  All of the widgets except for the buttons are built on the HTML5 canvas graphics context.
 ___
 ####Motivation
-I wanted to consolidate all of my native JS touchscreen widgets into one place.  While there are many existing libraries and frameworks that provide this same functionality, TouchLibJS is aimed to assist the creation of interactive art in the browser.
+I wanted to consolidate all of my native JS touchscreen widgets into one place.  While there are many existing libraries and frameworks that provide this same functionality, TouchLibJS is aimed to assist in the creation of browser based interactive art.
 
 ___
 
