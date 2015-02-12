@@ -17,7 +17,6 @@
     if (action == 'touchend') return;
     //get slider index
     var index;
-    var vals = [];
     for (var i = 0; i < this.numSliders; i++) {
       var lowerBound = i * this.sliderHeight;
       var upperBound = lowerBound + this.sliderHeight;
