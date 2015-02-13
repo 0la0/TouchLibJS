@@ -363,6 +363,7 @@ var toggleButton = new TouchLib.ToggleButton({
 Toggle Button Methods:
 ```javascript
 toggleButton.setVal(Boolean); //Set the state of the button to a boolean value
+toggleButton.processAction(); //Toggles the state of the button
 toggleButton.getVal(); //Returns the current boolean state of the button
 toggleButton.setClass(String); //sets the css class of the slider elements
 ```
