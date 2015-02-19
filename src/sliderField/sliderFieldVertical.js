@@ -3,8 +3,6 @@
   /*****************************************
    *  SliderFieldVert Extends SliderField  *
    *****************************************/
-  SliderFieldVert.prototype = new SliderField();
-  SliderFieldVert.prototype.constructor = SliderFieldVert;
   function SliderFieldVert (params) {
     SliderField.call(this, params);
     this.sliderWidth = Math.floor(this.width / this.numSliders);
@@ -12,7 +10,8 @@
     this.g2d.scale(1, -1);
     this.render();
   }
-
+  SliderFieldVert.prototype = new SliderField;
+  
   /**
    *  @Override
    **/

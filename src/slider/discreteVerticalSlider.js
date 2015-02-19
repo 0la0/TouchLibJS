@@ -3,8 +3,6 @@
    *           DISCRETE VERTICAL SLIDER          *
    *           EXTENDS  VERTICAL SLIDER          *
    ***********************************************/
-  DiscreteVertSlider.prototype = new Slider();
-  DiscreteVertSlider.prototype.constructor = HorizSlider; 
   function DiscreteVertSlider (params) {
     if (!params.numBins) {
       throw 'discrete vertical slider needs an integer number of bins';
@@ -29,6 +27,7 @@
     }
     this.g2d.fillStyle = oldStyle;
   }
+  DiscreteVertSlider.prototype = new Slider;
 
   /**
    *  SETS THE VALUE AND UPDATES THE UI

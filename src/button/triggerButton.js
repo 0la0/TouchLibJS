@@ -2,8 +2,6 @@
   /********************************************
   *      TRIGGER BUTTON EXTENDS BUTTON        *
   *********************************************/
-  TriggerButton.prototype = new Button();
-  TriggerButton.prototype.constructor = TriggerButton;
   function TriggerButton (params) {
     Button.call(this, params);
     this.timeout;
@@ -16,7 +14,8 @@
     }
     this.render(false);
   } 
-
+  TriggerButton.prototype = new Button;
+  
   /**
    *  TRIGGERS THE BUTTON
    **/

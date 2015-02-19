@@ -2,14 +2,13 @@
   /******************************************
    *  SliderFieldHoriz Extends SliderField  *
    ******************************************/
-  SliderFieldHoriz.prototype = new SliderField();
-  SliderFieldHoriz.prototype.constructor = SliderFieldHoriz;
   function SliderFieldHoriz (params) {
     SliderField.call(this, params);
     this.sliderHeight = Math.floor(this.height / this.numSliders);
     this.render();
   } 
-
+  SliderFieldHoriz.prototype = new SliderField;
+  
   /**
    *  @Override
    **/

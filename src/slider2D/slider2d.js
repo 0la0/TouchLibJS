@@ -3,8 +3,6 @@
   /************************************
    *  Slider2D Extends Canvas Object  *
    ************************************/
-  Slider2D.prototype = new CanvasObject();
-  Slider2D.prototype.constructor = Slider2D;
   function Slider2D (params) {
     if (!params) return;
     CanvasObject.call(this, params);
@@ -34,7 +32,7 @@
     this.twoPi = 2 * Math.PI;
     this.setNormalPosition(0.5, 0.5);
   }
-
+  Slider2D.prototype = new CanvasObject;
   /**
    *  @Override
    *  PROCESS MOUSE OR TOUCH COORDINATE DATA

@@ -4,8 +4,6 @@
    *  Slider Extends Canvas Object  *
    *                                *
    **********************************/
-  Slider.prototype = new CanvasObject();
-  Slider.prototype.constructor = Slider;
   function Slider (params) {
     if (!params) return;
     
@@ -67,6 +65,7 @@
       this.setValue(0);
     }
   }
+  Slider.prototype = new CanvasObject;
 
   /**
    *  @Override

@@ -3,11 +3,10 @@
    *            VERTICAL SLIDER                  *
    *            EXTENDS  SLIDER                  *
    ***********************************************/
-  VertSlider.prototype = new Slider();
-  VertSlider.prototype.constructor = VertSlider;
   function VertSlider (params) {
     Slider.call(this, params);
-  } 
+  }
+  VertSlider.prototype = new Slider;
 
   /**
    *  @Override

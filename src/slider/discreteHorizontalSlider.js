@@ -3,8 +3,6 @@
    *         DISCRETE HORIZONTAL SLIDER           *
    *         EXTENDS  HORIZONTAL SLIDER           *
    ************************************************/
-  DiscreteHorizSlider.prototype = new Slider();
-  DiscreteHorizSlider.prototype.constructor = HorizSlider; 
   function DiscreteHorizSlider (params) {
     if (!params.numBins) {
       throw 'discrete horizontal slider needs an integer number of bins';
@@ -29,6 +27,7 @@
     }
     this.g2d.fillStyle = oldStyle;
   }
+  DiscreteHorizSlider.prototype = new Slider;
 
   /**
    *  SETS THE VALUE AND UPDATES THE UI

@@ -3,8 +3,6 @@
   /********************************
    *  Knob Extends Canvas Object  *
    ********************************/
-  Knob.prototype = new CanvasObject();
-  Knob.prototype.constructor = Knob;
   function Knob (params) {
     if (!params) return;
     CanvasObject.call(this, params);
@@ -30,6 +28,7 @@
     this.setSize(params.width, params.height);
     this.render();
   }
+  Knob.prototype = new CanvasObject;
 
   /**
    *  @Override

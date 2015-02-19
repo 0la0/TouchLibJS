@@ -3,14 +3,13 @@
   /*******************************
    *  Joystick Extends Slider2D  *
    *******************************/
-  Joystick.prototype = new Slider2D();
-  Joystick.prototype.constructor = Joystick;
   function Joystick (params) {
     if (!params) return;
     Slider2D.call(this, params);
     if (!params.crosshairStyle) this.crosshairStyle = '#333333'; 
     else this.crosshairStyle = params.crosshairStyle;
   }
+  Joystick.prototype = new Slider2D;
 
   /**
    *  SET VALUE ([0 - WIDTH], [0 - HEIGHT])

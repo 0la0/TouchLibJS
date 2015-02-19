@@ -3,8 +3,6 @@
   /***************************************
    *  SliderField Extends Canvas Object  *
    ***************************************/
-  SliderField.prototype = new CanvasObject();
-  SliderField.prototype.constructor = SliderField;
   function SliderField (params) {
     if (!params) return;
     CanvasObject.call(this, params);
@@ -21,6 +19,7 @@
     this.errMsg = 'slider field values need an array of length ';
     this.errMsg += this.numSliders;
   }
+  SliderField.prototype = new CanvasObject;
 
   /*
    *  Set one normalized value in the slider field

@@ -168,8 +168,6 @@
    *  Slider Extends Canvas Object  *
    *                                *
    **********************************/
-  Slider.prototype = new CanvasObject();
-  Slider.prototype.constructor = Slider;
   function Slider (params) {
     if (!params) return;
     
@@ -231,6 +229,7 @@
       this.setValue(0);
     }
   }
+  Slider.prototype = new CanvasObject;
 
   /**
    *  @Override
@@ -290,11 +289,10 @@
    *            VERTICAL SLIDER                  *
    *            EXTENDS  SLIDER                  *
    ***********************************************/
-  VertSlider.prototype = new Slider();
-  VertSlider.prototype.constructor = VertSlider;
   function VertSlider (params) {
     Slider.call(this, params);
-  } 
+  }
+  VertSlider.prototype = new Slider;
 
   /**
    *  @Override
@@ -340,11 +338,10 @@
    *            HORIZONTAL SLIDER                *
    *            EXTENDS    SLIDER                *
    ***********************************************/
-  HorizSlider.prototype = new Slider();
-  HorizSlider.prototype.constructor = HorizSlider; 
   function HorizSlider (params) {
     Slider.call(this, params);
   }
+  HorizSlider.prototype = new Slider;
 
   /**
    *  SETS THE VALUE AND UPDATES THE UI
@@ -389,8 +386,6 @@
    *           DISCRETE VERTICAL SLIDER          *
    *           EXTENDS  VERTICAL SLIDER          *
    ***********************************************/
-  DiscreteVertSlider.prototype = new Slider();
-  DiscreteVertSlider.prototype.constructor = HorizSlider; 
   function DiscreteVertSlider (params) {
     if (!params.numBins) {
       throw 'discrete vertical slider needs an integer number of bins';
@@ -415,6 +410,7 @@
     }
     this.g2d.fillStyle = oldStyle;
   }
+  DiscreteVertSlider.prototype = new Slider;
 
   /**
    *  SETS THE VALUE AND UPDATES THE UI
@@ -492,8 +488,6 @@
    *         DISCRETE HORIZONTAL SLIDER           *
    *         EXTENDS  HORIZONTAL SLIDER           *
    ************************************************/
-  DiscreteHorizSlider.prototype = new Slider();
-  DiscreteHorizSlider.prototype.constructor = HorizSlider; 
   function DiscreteHorizSlider (params) {
     if (!params.numBins) {
       throw 'discrete horizontal slider needs an integer number of bins';
@@ -518,6 +512,7 @@
     }
     this.g2d.fillStyle = oldStyle;
   }
+  DiscreteHorizSlider.prototype = new Slider;
 
   /**
    *  SETS THE VALUE AND UPDATES THE UI
@@ -595,8 +590,6 @@
   /************************************
    *  Slider2D Extends Canvas Object  *
    ************************************/
-  Slider2D.prototype = new CanvasObject();
-  Slider2D.prototype.constructor = Slider2D;
   function Slider2D (params) {
     if (!params) return;
     CanvasObject.call(this, params);
@@ -626,7 +619,7 @@
     this.twoPi = 2 * Math.PI;
     this.setNormalPosition(0.5, 0.5);
   }
-
+  Slider2D.prototype = new CanvasObject;
   /**
    *  @Override
    *  PROCESS MOUSE OR TOUCH COORDINATE DATA
@@ -707,14 +700,13 @@
   /*******************************
    *  Joystick Extends Slider2D  *
    *******************************/
-  Joystick.prototype = new Slider2D();
-  Joystick.prototype.constructor = Joystick;
   function Joystick (params) {
     if (!params) return;
     Slider2D.call(this, params);
     if (!params.crosshairStyle) this.crosshairStyle = '#333333'; 
     else this.crosshairStyle = params.crosshairStyle;
   }
+  Joystick.prototype = new Slider2D;
 
   /**
    *  SET VALUE ([0 - WIDTH], [0 - HEIGHT])
@@ -792,8 +784,6 @@
   /********************************
    *  Knob Extends Canvas Object  *
    ********************************/
-  Knob.prototype = new CanvasObject();
-  Knob.prototype.constructor = Knob;
   function Knob (params) {
     if (!params) return;
     CanvasObject.call(this, params);
@@ -819,6 +809,7 @@
     this.setSize(params.width, params.height);
     this.render();
   }
+  Knob.prototype = new CanvasObject;
 
   /**
    *  @Override
@@ -899,8 +890,6 @@
   /***************************************
    *  SliderField Extends Canvas Object  *
    ***************************************/
-  SliderField.prototype = new CanvasObject();
-  SliderField.prototype.constructor = SliderField;
   function SliderField (params) {
     if (!params) return;
     CanvasObject.call(this, params);
@@ -917,6 +906,7 @@
     this.errMsg = 'slider field values need an array of length ';
     this.errMsg += this.numSliders;
   }
+  SliderField.prototype = new CanvasObject;
 
   /*
    *  Set one normalized value in the slider field
@@ -977,14 +967,13 @@
   /******************************************
    *  SliderFieldHoriz Extends SliderField  *
    ******************************************/
-  SliderFieldHoriz.prototype = new SliderField();
-  SliderFieldHoriz.prototype.constructor = SliderFieldHoriz;
   function SliderFieldHoriz (params) {
     SliderField.call(this, params);
     this.sliderHeight = Math.floor(this.height / this.numSliders);
     this.render();
   } 
-
+  SliderFieldHoriz.prototype = new SliderField;
+  
   /**
    *  @Override
    **/
@@ -1021,8 +1010,6 @@
   /*****************************************
    *  SliderFieldVert Extends SliderField  *
    *****************************************/
-  SliderFieldVert.prototype = new SliderField();
-  SliderFieldVert.prototype.constructor = SliderFieldVert;
   function SliderFieldVert (params) {
     SliderField.call(this, params);
     this.sliderWidth = Math.floor(this.width / this.numSliders);
@@ -1030,7 +1017,8 @@
     this.g2d.scale(1, -1);
     this.render();
   }
-
+  SliderFieldVert.prototype = new SliderField;
+  
   /**
    *  @Override
    **/
@@ -1201,8 +1189,6 @@
   /********************************************
   *       TOGGLE BUTTON EXTENDS BUTTON        *
   *********************************************/
-  ToggleButton.prototype = new Button();
-  ToggleButton.prototype.constructor = ToggleButton;
   function ToggleButton (params) {
     Button.call(this, params);
     if (params.val) {
@@ -1211,7 +1197,8 @@
       this.setVal(false);
     }
   } 
-
+  ToggleButton.prototype = new Button;
+  
   /**
    *  @Override
    **/
@@ -1241,8 +1228,6 @@
   /********************************************
   *      TRIGGER BUTTON EXTENDS BUTTON        *
   *********************************************/
-  TriggerButton.prototype = new Button();
-  TriggerButton.prototype.constructor = TriggerButton;
   function TriggerButton (params) {
     Button.call(this, params);
     this.timeout;
@@ -1255,7 +1240,8 @@
     }
     this.render(false);
   } 
-
+  TriggerButton.prototype = new Button;
+  
   /**
    *  TRIGGERS THE BUTTON
    **/

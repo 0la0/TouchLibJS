@@ -3,11 +3,10 @@
    *            HORIZONTAL SLIDER                *
    *            EXTENDS    SLIDER                *
    ***********************************************/
-  HorizSlider.prototype = new Slider();
-  HorizSlider.prototype.constructor = HorizSlider; 
   function HorizSlider (params) {
     Slider.call(this, params);
   }
+  HorizSlider.prototype = new Slider;
 
   /**
    *  SETS THE VALUE AND UPDATES THE UI
