@@ -16,3 +16,4 @@ files+=" button/toggleButton.js"
 files+=" button/triggerButton.js"
 files+=" meta/footer.js"
 cat $files > ../touchLib.js
+java -jar ../../../../yui/yuicompressor-2.4.8.jar ../touchLib.js -o ../touchLib.min.js
