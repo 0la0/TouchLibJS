@@ -74,7 +74,7 @@
         console.log('error: no class given');
         return; 
       }
-      this.canvasEl.className = className;
+      this.canvasEl.classList.add(className);
     },
 
     /**

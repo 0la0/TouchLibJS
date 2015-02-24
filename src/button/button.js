@@ -122,7 +122,7 @@
         console.log('error: no class given');
         return; 
       }   
-      this.element.className = className;
+      this.element.classList.add(className);
     },
 
     /**
