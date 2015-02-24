@@ -195,20 +195,33 @@
         params.height = 20;
       }
     }
+    if (params.noOutput) {
+      params.outputIsOverridden = true;
+      this.noOutput = true;
+    }
     if (params.outputIsOverridden) {
       this.outputIsOverridden = params.outputIsOverridden;
     } else {
       this.outputIsOverridden = false;
     }
-    this.labelEl = document.createElement('div');
-    this.outputEl = document.createElement('div');
+    if (params.label) {
+      this.labelEl = document.createElement('div');
+    }
+    
+    
     
     CanvasObject.call(this, params);
 
-    this.labelEl.appendChild(document.createTextNode(params.label));
-    this.parentEl.insertBefore(this.labelEl, this.canvasEl);
-    this.parentEl.appendChild(this.outputEl);
+    if (params.label) {
+      this.labelEl.appendChild(document.createTextNode(params.label));
+      this.parentEl.insertBefore(this.labelEl, this.canvasEl);
+    }
 
+    if (!params.noOutput) {
+      this.outputEl = document.createElement('div');
+      this.parentEl.appendChild(this.outputEl);
+    }
+    
     this.val = 0;
     this.lastVal = 0;
     this.g2d = this.canvasEl.getContext('2d');
@@ -221,7 +234,11 @@
       for (var key in params.sliderCss) {
         this.canvasEl.style[key] = params.sliderCss[key];
       }
-    } 
+    }
+
+    if (params.cssClass) {
+      this.setClass(params.cssClass);
+    }
 
     if (params.initVal) {
       this.setValue(params.initVal);
@@ -236,13 +253,13 @@
    *  SETS THE CSS CLASS OF THE SLIDER ELEMENTS
    **/
   Slider.prototype.setClass = function (className) {
-    CanvasObject.prototype.setClass.call(this, className);
     if (!className) {
-      console.log('slider set class error: no class given');
+      throw 'slider set class error: no class given';
       return; 
     }
-    this.labelEl.className = className;
-    this.outputEl.className = className;
+    CanvasObject.prototype.setClass.call(this, className);
+    if (this.labelEl) this.labelEl.classList.add(className);
+    if (!this.noOutput) this.outputEl.classList.add(className);
   }
 
   /**
