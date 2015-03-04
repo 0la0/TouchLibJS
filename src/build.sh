@@ -1,3 +1,5 @@
+#!/bin/bash
+
 files=" meta/header.js"
 files+=" meta/canvasObj.js"
 files+=" slider/slider.js"
@@ -15,5 +17,7 @@ files+=" button/button.js"
 files+=" button/toggleButton.js"
 files+=" button/triggerButton.js"
 files+=" meta/footer.js"
+
 cat $files > ../touchLib.js
+
 uglifyjs ../touchLib.js -o ../touchLib.min.js -c -m
