@@ -14,22 +14,14 @@
       return;
     }
     
-    if (!params.label) params.label = '';
-    if (!params.fillstyle) params.fillstyle = '#666666'
+    params.label = params.label || '';
+    params.fillstyle = params.fillstyle || '#666666'; 
 
     if (!params.width) {
-      if (this instanceof VertSlider) {
-        params.width = 20;
-      } else {
-        params.height = 100;
-      }
+      this instanceof VertSlider ? params.width = 20 : params.height = 100;
     }
     if (!params.height) {
-      if (this instanceof VertSlider) {
-        params.height = 100;
-      } else {
-        params.height = 20;
-      }
+      this instanceof VertSlider ? params.height = 100 : params.height = 20;
     }
     if (params.noOutput) {
       params.outputIsOverridden = true;
@@ -43,9 +35,10 @@
     if (params.label) {
       this.labelEl = document.createElement('div');
     }
-    
-    
-    
+    if (!params.noOutput) {
+      this.outputEl = document.createElement('div');
+    }
+
     CanvasObject.call(this, params);
 
     if (params.label) {
@@ -54,7 +47,6 @@
     }
 
     if (!params.noOutput) {
-      this.outputEl = document.createElement('div');
       this.parentEl.appendChild(this.outputEl);
     }
     
@@ -71,16 +63,13 @@
         this.canvasEl.style[key] = params.sliderCss[key];
       }
     }
-
+    
     if (params.cssClass) {
       this.setClass(params.cssClass);
     }
 
-    if (params.initVal) {
-      this.setValue(params.initVal);
-    } else {
-      this.setValue(0);
-    }
+    params.initVal = params.initVal || 0;
+    this.setValue(params.initVal);
   }
   Slider.prototype = new CanvasObject;
 
@@ -94,6 +83,7 @@
       return; 
     }
     CanvasObject.prototype.setClass.call(this, className);
+    
     if (this.labelEl) this.labelEl.classList.add(className);
     if (!this.noOutput) this.outputEl.classList.add(className);
   }
