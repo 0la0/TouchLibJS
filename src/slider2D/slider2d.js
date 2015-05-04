@@ -22,12 +22,8 @@
       prevY: 0
     };
     this.normalVal = {x: 0, y: 0};
-    if (params.radius == undefined) {
-      this.cvsPos.radius = 20;
-    }
-    else {
-      this.cvsPos.radius = params.radius;
-    }
+    params.radius = params.radius || 20;
+    this.cvsPos.radius = params.radius;
     this.cvsPos.radius2 = this.cvsPos.radius * 2;
     this.twoPi = 2 * Math.PI;
     this.setNormalPosition(0.5, 0.5);
@@ -38,7 +34,7 @@
    *  PROCESS MOUSE OR TOUCH COORDINATE DATA
    **/
   Slider2D.prototype.processMouseTouch = function (action, x, y) {
-    if (action == 'touchend') return;
+    if (action === 'touchend') return;
     if (x < 0) x = 0;
     else if (x >= this.width) {
       x = this.width - 1;

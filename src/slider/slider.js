@@ -7,7 +7,7 @@
   function Slider (params) {
     if (!params) return;
     
-    if (typeof(params.notify) == 'function') {
+    if (typeof(params.notify) === 'function') {
       this.notify = params.notify;
     } else {
       throw 'constructor needs a notify function to be useful';

@@ -43,7 +43,7 @@
    *  @Override
    **/
   VertSlider.prototype.processMouseTouch = function (action, x, y) {
-    if (action == 'touchend') return;
+    if (action === 'touchend') return;
     this.setVal(this.height - y);
   }
 

@@ -6,8 +6,8 @@
   function Joystick (params) {
     if (!params) return;
     Slider2D.call(this, params);
-    if (!params.crosshairStyle) this.crosshairStyle = '#333333'; 
-    else this.crosshairStyle = params.crosshairStyle;
+    params.crosshairStyle = params.crosshairStyle || '#333333';
+    this.crosshairStyle = params.crosshairStyle;
   }
   Joystick.prototype = new Slider2D;
 

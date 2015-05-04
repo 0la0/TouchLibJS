@@ -96,7 +96,7 @@
    *  @Override
    **/
   DiscreteHorizSlider.prototype.processMouseTouch = function (action, x, y) {
-    if (action == 'touchend') return;
+    if (action === 'touchend') return;
     this.setVal(x);
   }
 
