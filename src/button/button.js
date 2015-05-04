@@ -19,23 +19,20 @@
     if (params.elementId) {
       try {
         this.element = document.getElementById(params.elementId);
-        if (this.element == null) {
+        if (!this.element) {
           throw 'cannot build button: param object needs an elementId';
-          return;
         }
       } catch (err) {
         console.log('err getting element');
       }
     } else {
       throw 'cannot build button: param object needs an elementId';
-      return; 
     }
 
-    if (typeof(params.notify) == 'function') {
+    if (typeof(params.notify) === 'function') {
       this.notify = params.notify;
     } else {
       throw 'button constructor needs an notify function to be useful';
-      return;
     }
 
     if (params.on) {
@@ -74,7 +71,7 @@
           self.processAction();
         }, false);
       } catch (err) {
-        console.log('error creating mouse listener');
+        throw 'error creating mouse listener';
       }
       try {
         self.element.addEventListener('touchstart', function (e) {
@@ -82,7 +79,7 @@
           self.processAction();
         }, false);
       } catch (err) {
-        console.log('error creating touch listener'); 
+        throw 'error creating touch listener'; 
       }
     },
 
@@ -118,10 +115,7 @@
      *  SETS THE CSS CLASS OF THE BUTTON
      **/
     setClass: function (className) {
-      if (className == null) {
-        console.log('error: no class given');
-        return; 
-      }   
+      if (className == null) throw 'Button error: no class given';  
       this.element.classList.add(className);
     },
 

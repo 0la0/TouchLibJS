@@ -4,11 +4,8 @@
   *********************************************/
   function ToggleButton (params) {
     Button.call(this, params);
-    if (params.val) {
-      this.setVal(params.val);
-    } else {
-      this.setVal(false);
-    }
+    params.val = params.val || false;
+    this.setVal(params.val);
   } 
   ToggleButton.prototype = new Button;
   

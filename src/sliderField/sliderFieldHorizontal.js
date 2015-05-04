@@ -13,7 +13,7 @@
    *  @Override
    **/
   SliderFieldHoriz.prototype.processMouseTouch = function (action, x, y) {
-    if (action == 'touchend') return;
+    if (action === 'touchend') return;
     //get slider index
     var index;
     for (var i = 0; i < this.numSliders; i++) {

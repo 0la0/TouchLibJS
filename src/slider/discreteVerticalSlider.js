@@ -6,7 +6,6 @@
   function DiscreteVertSlider (params) {
     if (!params.numBins) {
       throw 'discrete vertical slider needs an integer number of bins';
-      return;
     }
     this.numBins = params.numBins
     this.binSize = Math.floor(params.height / this.numBins);
@@ -58,7 +57,6 @@
   DiscreteVertSlider.prototype.setBin = function (index) {
     if (index < 0 || index >= this.numBins) {
       throw 'indexOutOfBounds Exception';
-      return;
     }
     this.currentBin = index;
     if (this.currentBin != this.lastBin) {

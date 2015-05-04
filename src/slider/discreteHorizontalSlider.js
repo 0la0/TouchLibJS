@@ -6,7 +6,6 @@
   function DiscreteHorizSlider (params) {
     if (!params.numBins) {
       throw 'discrete horizontal slider needs an integer number of bins';
-      return;
     }
     this.numBins = params.numBins
     this.binSize = Math.floor(params.width / this.numBins);
@@ -58,7 +57,6 @@
   DiscreteHorizSlider.prototype.setBin = function (index) {
     if (index < 0 || index >= this.numBins) {
       throw 'indexOutOfBounds Exception';
-      return;
     }
     this.currentBin = index;
     if (this.currentBin != this.lastBin) {

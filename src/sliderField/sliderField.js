@@ -7,9 +7,9 @@
     if (!params) return;
     CanvasObject.call(this, params);
 
-    if (params.numSliders == undefined) this.numSliders = 10;
-    else this.numSliders = params.numSliders;
-    
+    params.numSliders = params.numSliders || 10;
+    this.numSliders = params.numSliders;
+
     this.realVals = [];
     for (var i = 0; i < this.numSliders; i++) {
       this.realVals.push(Math.random());
@@ -27,7 +27,6 @@
   SliderField.prototype.setVal = function (index, val) {
     if (index < 0 || index >= this.numSliders) {
       throw 'SliderField.setVal - indexOutOfBounds Exception';
-      return;
     }
     if (val < 0) val = 0;
     else if (val > 1) val = 1;
@@ -40,20 +39,16 @@
    *  Set all normalized values in the slider field
    */
   SliderField.prototype.setVals = function (vals) {
-    if (!(vals instanceof Array)) {
-      throw this.errMsg;
-      return;
-    }
-    else if (vals.length != this.numSliders) {
-      throw this.errMsg;
-      return;
-    }
+    if (!(vals instanceof Array)) throw this.errMsg;
+    else if (vals.length != this.numSliders) throw this.errMsg;
+    
     for (var i = 0; i < this.numSliders; i++) {
       var val = vals[i];
       if (val < 0) val = 0;
       else if (val > 1) val = 1;
       this.realVals[i] = val;
     }
+
     this.notify(this.realVals);
     this.requestRender();
   }
@@ -64,7 +59,6 @@
   SliderField.prototype.getVal = function (index) {
     if (index < 0 || index >= this.numSliders) {
       throw 'SliderField.setVal - indexOutOfBounds Exception';
-      return;
     }
     return this.realVals[index];
   }

@@ -13,14 +13,12 @@
         this.parentEl = document.getElementById(params.elementId);
         if (this.parentEl == null) {
           throw 'cannot build object: param object needs an elementId';
-          return;
         }
       } catch (err) {
-        console.log('err getting element');
+        throw 'err creating canvas element';
       }
     } else {
       throw 'cannot build object: param object needs an elementId';
-      return; 
     }
 
     this.canvasEl = document.createElement('canvas');
@@ -171,11 +169,10 @@
   function Slider (params) {
     if (!params) return;
     
-    if (typeof(params.notify) == 'function') {
+    if (typeof(params.notify) === 'function') {
       this.notify = params.notify;
     } else {
       throw 'constructor needs a notify function to be useful';
-      return;
     }
     
     params.label = params.label || '';
@@ -244,7 +241,6 @@
   Slider.prototype.setClass = function (className) {
     if (!className) {
       throw 'slider set class error: no class given';
-      return; 
     }
     CanvasObject.prototype.setClass.call(this, className);
     
@@ -336,7 +332,7 @@
    *  @Override
    **/
   VertSlider.prototype.processMouseTouch = function (action, x, y) {
-    if (action == 'touchend') return;
+    if (action === 'touchend') return;
     this.setVal(this.height - y);
   }
 
@@ -384,7 +380,7 @@
    *  @Override
    **/
   HorizSlider.prototype.processMouseTouch = function (action, x, y) {
-    if (action == 'touchend') return;
+    if (action === 'touchend') return;
     this.setVal(x);
   }
 
@@ -396,7 +392,6 @@
   function DiscreteVertSlider (params) {
     if (!params.numBins) {
       throw 'discrete vertical slider needs an integer number of bins';
-      return;
     }
     this.numBins = params.numBins
     this.binSize = Math.floor(params.height / this.numBins);
@@ -448,7 +443,6 @@
   DiscreteVertSlider.prototype.setBin = function (index) {
     if (index < 0 || index >= this.numBins) {
       throw 'indexOutOfBounds Exception';
-      return;
     }
     this.currentBin = index;
     if (this.currentBin != this.lastBin) {
@@ -486,7 +480,7 @@
    *  @Override
    **/
   DiscreteVertSlider.prototype.processMouseTouch = function (action, x, y) {
-    if (action == 'touchend') return;
+    if (action === 'touchend') return;
     this.setVal(y);
   }
 
@@ -498,7 +492,6 @@
   function DiscreteHorizSlider (params) {
     if (!params.numBins) {
       throw 'discrete horizontal slider needs an integer number of bins';
-      return;
     }
     this.numBins = params.numBins
     this.binSize = Math.floor(params.width / this.numBins);
@@ -550,7 +543,6 @@
   DiscreteHorizSlider.prototype.setBin = function (index) {
     if (index < 0 || index >= this.numBins) {
       throw 'indexOutOfBounds Exception';
-      return;
     }
     this.currentBin = index;
     if (this.currentBin != this.lastBin) {
@@ -588,7 +580,7 @@
    *  @Override
    **/
   DiscreteHorizSlider.prototype.processMouseTouch = function (action, x, y) {
-    if (action == 'touchend') return;
+    if (action === 'touchend') return;
     this.setVal(x);
   }
 
@@ -616,12 +608,8 @@
       prevY: 0
     };
     this.normalVal = {x: 0, y: 0};
-    if (params.radius == undefined) {
-      this.cvsPos.radius = 20;
-    }
-    else {
-      this.cvsPos.radius = params.radius;
-    }
+    params.radius = params.radius || 20;
+    this.cvsPos.radius = params.radius;
     this.cvsPos.radius2 = this.cvsPos.radius * 2;
     this.twoPi = 2 * Math.PI;
     this.setNormalPosition(0.5, 0.5);
@@ -632,7 +620,7 @@
    *  PROCESS MOUSE OR TOUCH COORDINATE DATA
    **/
   Slider2D.prototype.processMouseTouch = function (action, x, y) {
-    if (action == 'touchend') return;
+    if (action === 'touchend') return;
     if (x < 0) x = 0;
     else if (x >= this.width) {
       x = this.width - 1;
@@ -710,8 +698,8 @@
   function Joystick (params) {
     if (!params) return;
     Slider2D.call(this, params);
-    if (!params.crosshairStyle) this.crosshairStyle = '#333333'; 
-    else this.crosshairStyle = params.crosshairStyle;
+    params.crosshairStyle = params.crosshairStyle || '#333333';
+    this.crosshairStyle = params.crosshairStyle;
   }
   Joystick.prototype = new Slider2D;
 
@@ -799,13 +787,16 @@
       this.canvasEl.style.background = '#ffffff';
       this.canvasEl.style.border = '1px solid #333333';  
     }
-    if (!params.radius) this.radius = this.width / 3;
-    else this.radius = params.radius;
-    if (!params.outline) this.outline = '#cccccc';
-    else this.outline = params.outline;
-    if (!params.fillStyle) this.fillStyle = '#333333';
-    else this.fillStyle = params.fillStyle;
-
+    
+    params.radius = params.radius || this.width / 3;
+    this.radius = params.radius;
+    
+    params.outline = params.outline || '#cccccc';
+    this.outline = params.outline;
+    
+    params.fillStyle = params.fillStyle || '#333333';
+    this.fillStyle = params.fillStyle;
+    
     this.realVal;
     this.theta = 0;
     this.notify = params.notify;
@@ -843,7 +834,7 @@
    *  @Override
    **/
   Knob.prototype.processMouseTouch = function (action, x, y) {
-    if (action == 'touchend') return;
+    if (action === 'touchend') return;
     x = x - this.halfWidth;
     y = y - this.halfHeight;
     var realValue;
@@ -882,7 +873,6 @@
   Knob.prototype.setVal = function (val) {
     if (val < 0 || val > 1) {
       throw 'valueOutOfBounds Exception, takes [0 - 1]';
-      return;
     }
     this.realVal = val;
     //calculate theta
@@ -901,9 +891,9 @@
     if (!params) return;
     CanvasObject.call(this, params);
 
-    if (params.numSliders == undefined) this.numSliders = 10;
-    else this.numSliders = params.numSliders;
-    
+    params.numSliders = params.numSliders || 10;
+    this.numSliders = params.numSliders;
+
     this.realVals = [];
     for (var i = 0; i < this.numSliders; i++) {
       this.realVals.push(Math.random());
@@ -921,7 +911,6 @@
   SliderField.prototype.setVal = function (index, val) {
     if (index < 0 || index >= this.numSliders) {
       throw 'SliderField.setVal - indexOutOfBounds Exception';
-      return;
     }
     if (val < 0) val = 0;
     else if (val > 1) val = 1;
@@ -934,20 +923,16 @@
    *  Set all normalized values in the slider field
    */
   SliderField.prototype.setVals = function (vals) {
-    if (!(vals instanceof Array)) {
-      throw this.errMsg;
-      return;
-    }
-    else if (vals.length != this.numSliders) {
-      throw this.errMsg;
-      return;
-    }
+    if (!(vals instanceof Array)) throw this.errMsg;
+    else if (vals.length != this.numSliders) throw this.errMsg;
+    
     for (var i = 0; i < this.numSliders; i++) {
       var val = vals[i];
       if (val < 0) val = 0;
       else if (val > 1) val = 1;
       this.realVals[i] = val;
     }
+
     this.notify(this.realVals);
     this.requestRender();
   }
@@ -958,7 +943,6 @@
   SliderField.prototype.getVal = function (index) {
     if (index < 0 || index >= this.numSliders) {
       throw 'SliderField.setVal - indexOutOfBounds Exception';
-      return;
     }
     return this.realVals[index];
   }
@@ -985,7 +969,7 @@
    *  @Override
    **/
   SliderFieldHoriz.prototype.processMouseTouch = function (action, x, y) {
-    if (action == 'touchend') return;
+    if (action === 'touchend') return;
     //get slider index
     var index;
     for (var i = 0; i < this.numSliders; i++) {
@@ -1030,7 +1014,7 @@
    *  @Override
    **/
   SliderFieldVert.prototype.processMouseTouch = function (action, x, y) {
-    if (action == 'touchend') return;
+    if (action === 'touchend') return;
     //get slider index
     var index;
     for (var i = 0; i < this.numSliders; i++) {
@@ -1078,23 +1062,20 @@
     if (params.elementId) {
       try {
         this.element = document.getElementById(params.elementId);
-        if (this.element == null) {
+        if (!this.element) {
           throw 'cannot build button: param object needs an elementId';
-          return;
         }
       } catch (err) {
         console.log('err getting element');
       }
     } else {
       throw 'cannot build button: param object needs an elementId';
-      return; 
     }
 
-    if (typeof(params.notify) == 'function') {
+    if (typeof(params.notify) === 'function') {
       this.notify = params.notify;
     } else {
       throw 'button constructor needs an notify function to be useful';
-      return;
     }
 
     if (params.on) {
@@ -1133,7 +1114,7 @@
           self.processAction();
         }, false);
       } catch (err) {
-        console.log('error creating mouse listener');
+        throw 'error creating mouse listener';
       }
       try {
         self.element.addEventListener('touchstart', function (e) {
@@ -1141,7 +1122,7 @@
           self.processAction();
         }, false);
       } catch (err) {
-        console.log('error creating touch listener'); 
+        throw 'error creating touch listener'; 
       }
     },
 
@@ -1177,10 +1158,7 @@
      *  SETS THE CSS CLASS OF THE BUTTON
      **/
     setClass: function (className) {
-      if (className == null) {
-        console.log('error: no class given');
-        return; 
-      }   
+      if (className == null) throw 'Button error: no class given';  
       this.element.classList.add(className);
     },
 
@@ -1198,11 +1176,8 @@
   *********************************************/
   function ToggleButton (params) {
     Button.call(this, params);
-    if (params.val) {
-      this.setVal(params.val);
-    } else {
-      this.setVal(false);
-    }
+    params.val = params.val || false;
+    this.setVal(params.val);
   } 
   ToggleButton.prototype = new Button;
   
@@ -1243,7 +1218,6 @@
       this.timeoutTime = params.triggerTimeout;
     } else {
       throw 'constructor error: need a numeric timeout parameter';
-      return;
     }
     this.render(false);
   } 

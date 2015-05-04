@@ -9,14 +9,12 @@
         this.parentEl = document.getElementById(params.elementId);
         if (this.parentEl == null) {
           throw 'cannot build object: param object needs an elementId';
-          return;
         }
       } catch (err) {
-        console.log('err getting element');
+        throw 'err creating canvas element';
       }
     } else {
       throw 'cannot build object: param object needs an elementId';
-      return; 
     }
 
     this.canvasEl = document.createElement('canvas');

@@ -11,13 +11,16 @@
       this.canvasEl.style.background = '#ffffff';
       this.canvasEl.style.border = '1px solid #333333';  
     }
-    if (!params.radius) this.radius = this.width / 3;
-    else this.radius = params.radius;
-    if (!params.outline) this.outline = '#cccccc';
-    else this.outline = params.outline;
-    if (!params.fillStyle) this.fillStyle = '#333333';
-    else this.fillStyle = params.fillStyle;
-
+    
+    params.radius = params.radius || this.width / 3;
+    this.radius = params.radius;
+    
+    params.outline = params.outline || '#cccccc';
+    this.outline = params.outline;
+    
+    params.fillStyle = params.fillStyle || '#333333';
+    this.fillStyle = params.fillStyle;
+    
     this.realVal;
     this.theta = 0;
     this.notify = params.notify;
@@ -55,7 +58,7 @@
    *  @Override
    **/
   Knob.prototype.processMouseTouch = function (action, x, y) {
-    if (action == 'touchend') return;
+    if (action === 'touchend') return;
     x = x - this.halfWidth;
     y = y - this.halfHeight;
     var realValue;
@@ -94,7 +97,6 @@
   Knob.prototype.setVal = function (val) {
     if (val < 0 || val > 1) {
       throw 'valueOutOfBounds Exception, takes [0 - 1]';
-      return;
     }
     this.realVal = val;
     //calculate theta

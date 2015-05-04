@@ -11,7 +11,6 @@
       this.notify = params.notify;
     } else {
       throw 'constructor needs a notify function to be useful';
-      return;
     }
     
     params.label = params.label || '';
@@ -80,7 +79,6 @@
   Slider.prototype.setClass = function (className) {
     if (!className) {
       throw 'slider set class error: no class given';
-      return; 
     }
     CanvasObject.prototype.setClass.call(this, className);
     

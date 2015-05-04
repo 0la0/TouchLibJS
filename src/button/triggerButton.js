@@ -10,7 +10,6 @@
       this.timeoutTime = params.triggerTimeout;
     } else {
       throw 'constructor error: need a numeric timeout parameter';
-      return;
     }
     this.render(false);
   } 
